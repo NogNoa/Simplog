@@ -1,0 +1,25 @@
+﻿Object
+Proposition
+
+Objects
+∀O -all O, a universel. the object of all objects with whatever qualification or predicate.
+O∈∀O an instance of a universal. 
+O:P - O such that P - an object that is qulified by a propistion. Itself an object.
+O(O) - Object that is dependant on another object.
+
+Propositions
+P⇒P - if P then P - a propostion follows from a propostion. Itself a proposition.
+P⇔P- P if and only if P - two proposition follow from each other and therfore are equivalent.
+O;P - for O it's true that P - a proposition that assumes an object, itself a proposition.
+∃O- O exists - a object with whatever qulification or predicate exists.
+
+Moods 
+let {P} - a proposition is imperativly stated as true, with existential import.
+sup {P} - making a supposition that could turn out to be false later. Could be indexd for referance sup1 {P}, sup2 {P}.
+asm {P} - a proposition, or series of propositions, are true if all our assumption are true.
+asm_n {P} - a proposition is true if suppostion n is true.
+true {P} -  a proposition, or series of propositions is true from all we are certain about.
+contra {n⇐P}- an assumtion n is false due to a contradictory proposition p that follows from n.
+def {O|P} defines Object O by imperativly stating a proposition P as true.
+ntte {O=O} notating object by another object 
+true could be omitted.
