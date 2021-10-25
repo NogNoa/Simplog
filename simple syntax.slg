@@ -10,12 +10,20 @@ prim <statement>
 prim <term>
 syn {syn <statement>}
 syn {form <term>}
+
+prim :
+prim ;
+prim |
 form {<term>:<statement>}
 syn {<term>;<statment>}
+syn {<statement>|<statement>}
+
 syn {prim <term>}
 syn {let <statement>}
+
 syn {def <term>;<statement>}
-syn {prv <statement>|{<statement>}}
+syn {prv <statement>|<statement>}
+
 prim <type-term>
 prim <object-term>
 form {<type-term> <object-term>}
