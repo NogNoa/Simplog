@@ -28,11 +28,11 @@ prim <type-term>
 prim <object-term>
 form {<type-term> <object-term>}
 
-}
-the type of terms need to be mentioned only if it's not implied from syntax of a positive statement regarding it.
+/*
+the type of a term need to be mentioned only if it's not implied from syntax of a positive statement regarding it. and the statement hold true for all implied types.
 
-terms that are in english rather than symbolic have to have <> following the example of BNF
+terms that are in english rather than symbolic have to have <>, following the example of BNF
 escaped english words are stand-ins for symbols so they don't have to have them.
 
-the keywords and ; and : require enclosing their compund arguments (statements or terms) in {} rather than ()
-
+the keywords and ; and : require enclosing their compound arguments (statements or terms) in {} rather than ()
+*/
