@@ -27,7 +27,10 @@ syn {prv <statement>|<statement>}
 prim <type-term>
 prim <object-term>
 form {<type-term> <object-term>}
-def {\is;{\all <type-term> T; {\all T <object-term> o; o \is T}}}
+)def {\is;{\all <type-term> T; {\all T <object-term> o; o \is T}}}
+
+prim <WF>
+let {<statement> S \is <WF> \iff {syn S}} 
 
 /*
 the type of a term need to be mentioned only if it's not implied from syntax of a positive statement regarding it. and the statement hold true for all implied types.
