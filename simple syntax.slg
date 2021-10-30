@@ -1,3 +1,5 @@
+/* Declaration Syntax */
+
 keywords:
 						terms		statements
 	defined/proved		def(ine)	pr(o)v(e)
@@ -27,7 +29,7 @@ syn {prv <statement>|<statement>}
 prim <type-term>
 prim <object-term>
 form {<type-term> <object-term>}
-)def {\is;{\all <type-term> T; {\all T <object-term> o; o \is T}}}
+def {\is;{\all <type-term> T; {\all T <object-term> o; o \is T}}}
 
 prim <WF>
 
@@ -38,4 +40,19 @@ terms that are in english rather than symbolic have to have <>, following the ex
 escaped english words are stand-ins for symbols so they don't have to have them.
 
 the keywords and ; and : require enclosing their compound arguments (statements or terms) in {} rather than ()
+
+overloading is possible, that is defining a term multiple times for different contexts
+
+{prim <object> O} imply {\exist O}
+*/
+
+/* Argument syntax */
+
+syn {<statement> \trfr <statement>}
+syn {prv {<statement> T|{<statement> S \trfr T}}}
+syn {prv {<statement> T|{\not T \trfr false}}}
+syn {prv {<statement> S \than <statement> T|{S \trfr T}}}
+
+/*
+\trfr is transitive. so {A \trfr B \trfr C} could be reduced to {A \trfr C}
 */
