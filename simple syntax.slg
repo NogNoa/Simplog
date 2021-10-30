@@ -55,4 +55,6 @@ syn {prv {<statement> S \than <statement> T|{S \trfr T}}}
 
 /*
 \trfr is transitive. so {A \trfr B \trfr C} could be reduced to {A \trfr C}
+
+\trfr also enclose in {}
 */
