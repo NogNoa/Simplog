@@ -11,7 +11,7 @@ keywords:
 prim <statement>
 prim <term>
 syn {syn <statement>}
-syn {form <term>}
+syn {form <term>?=<term>}
 
 prim :
 prim ;
@@ -26,10 +26,9 @@ syn {def <term>;<statement>}
 
 prim <type-term>
 prim <object-term>
-form {<type-term> <object-term>}
-def {\is;{\all <type-term> T; {\all T <object-term> o; o \is T}}}
-
-prim <WF>
+syn {<object-term> \is <type-term>}
+form {<type-term> <object-term> ?= <object-term>: <object-term> \is <type-term>}
+form {<type-term> T <object-term> o ?= o: o \is T}
 
 /*
 the type of a term need to be mentioned only if it's not implied from syntax of a positive statement regarding it. and the statement hold true for all implied types.
@@ -37,7 +36,7 @@ the type of a term need to be mentioned only if it's not implied from syntax of 
 terms that are in english rather than symbolic have to have <>, following the example of BNF
 escaped english words are stand-ins for symbols so they don't have to have them.
 
-the keywords and ; and : require enclosing their compound arguments (statements or terms) in {} rather than ()
+the keywords and ; require enclosing their compound arguments (statements or terms) in {} rather than ()
 
 overloading is possible, that is defining a term multiple times for different contexts
 
