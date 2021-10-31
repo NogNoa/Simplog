@@ -18,13 +18,11 @@ prim ;
 prim |
 form {<term>:<statement>}
 syn {<term>;<statment>}
-syn {<statement>|<statement>}
 
 syn {prim <term>}
 syn {let <statement>}
 
 syn {def <term>;<statement>}
-syn {prv <statement>|<statement>}
 
 prim <type-term>
 prim <object-term>
@@ -43,7 +41,7 @@ the keywords and ; and : require enclosing their compound arguments (statements 
 
 overloading is possible, that is defining a term multiple times for different contexts
 
-{prim <object> O} imply {\exist O}
+{prim <object-term> O} imply {\exist O}
 */
 
 /* Argument syntax */
