@@ -1,0 +1,54 @@
+Objects:
+O		    # A general Object.
+I           # An individual Object
+O:P         # An object for which P is ‎True
+\A\ O:P     # Any object for which P
+
+Sets:
+S		    # A simple Set
+{O}_s       # The set that includes O and only it.
+SחS         # The set of all objects that are in both S and S
+S:P 	    # The set of all objects that are in S, and for which P is ‎True.
+
+Propositions:
+P           # A simple Proposition.
+O;P 	    # Claiming that for object O, P is true.
+OεS         # Claiming that O is in S
+\E\ O	    # Claiming that an object O exists.
+P /=> P     # Claiming that if P than P.
+P <=> P     # Claiming that P if and only if P.
+
+Moods:
+LET {O} 	# Introducing O. Existance is imperativly implied.
+LET {P} 	# Imperativly claiming P.
+DEF {O}	name
+DEF {S}	name# Introducing O or S. the syntax of O or S is expected to end with or at least include ':P'. Existance is              imperativly implied.
+{P} 		# Claiming P, relying on what was already Known.
+PRV {P}		# expect everything until QED to be what P is relying on, i.e the proof for P.
+ASM {P} name# Introducing P as assumption without claiming it. P get a name.
+SUP {P}		# Claiming P as supposition, relying on all preceding assumptions. 
+SUP {P} name# Claiming P, relying on a named assumption. 
+            # When an assumption is discarded, all relient suppositions are discarded.
+CNT {P}		# Concluding that P is a contradiction. expects next line to claim an assumption False.
+FLS name	# Claiming an assumption is False. discarding it
+DSC name    # Discards an assumption without falsifaing it.
+QED			# End of proof. P in the PRV statement is claimed and every assumption inside the proof is discarded.
+CRL {P}	    # After QED, adding a proposition that relient on the proved by a single step, thus not needing a full              argument
+NTT {O \== O}
+NTT {S \== S}   # Imperativly introducing an equivalent way to refer to an object or set already introduced.
+
+Order of Operations:
+Mathematical operators are more internal than logical.
+Unary operations are more most internal
+Operations between two objects or sets more internal than operations between one of those and a proposition
+: more internal than ;
+oprations between an object or set and a proposition more internal than  operations between two propositions
+operator of equal place in the order the right are more internal than the left
+
+a phrase of the kind X:P or S:P where P is simple, made of only 3 characters: subject, binary operator and operand, where the subject is the X or the P of the bigger phrase, this subject could be omited from P. for instance
+    X:XεS \== X:εS
+    S:S=S_1 \== S:=S_1 (not to be confused with defined)
+    this never happens with unary or potentialy unary operators (-,\not, \E\, \A\)
+    
+Draft
+ claiming a supposition as corollary from the proof, thus saving it from being discarded.

@@ -1,0 +1,4 @@
+O 2
+Q even
+S numbers
+{Q} {even}
