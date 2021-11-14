@@ -1,0 +1,8 @@
+<term> ::= <type-term> | <object-term> | <qualified-term>
+<qualified-term> ::= <type-term> <object-term>| <term>":"<statement>
+<statement> ::= <term-declaration> | <statement-declaration> | <predication-statement> | <argument>
+<term-declaration> ::= "prim" <term> | "def" <predication-statement> | "form" <term> |"form" <term> "?=" <term>
+<statement-declaration> ::= "let" <statement> | "syn" <statement>
+<predication-statement> ::= <term>";"<statment>
+<argument> ::= "prv" <statement>" | "<deduction>
+<deduction> ::= <statement> "\trfr" <statement> | <statement> "\trfr" <deduction> | <deduction> "\trfr" "false"
