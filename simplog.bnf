@@ -6,3 +6,4 @@
 <predication-statement> ::= <term>";"<statment>
 <argument> ::= "prv" <statement>" | "<deduction>
 <deduction> ::= <statement> "\trfr" <statement> | <statement> "\trfr" <deduction> | <deduction> "\trfr" "false"
+<block-comment> ::= "/*"("*"(^"/")|^"*")*"*/"
