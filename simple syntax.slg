@@ -28,7 +28,10 @@ prim <type-term>
 prim <object-term>
 syn {<object-term> \is <type-term>}
 form {<type-term> <object-term> ?= <object-term>: <object-term> \is <type-term>}
-form {<type-term> T <object-term> o ?= o: o \is T}
+form {(<type-term> T) (<object-term> o) ?= o: o \is T}
+
+prim <relation>
+form {(<term> t): (<relation> r) (<term> g) ?= t:t r g}
 
 /*
 the type of a term need to be mentioned only if it's not implied from syntax of a positive statement regarding it. and the statement hold true for all implied types.
