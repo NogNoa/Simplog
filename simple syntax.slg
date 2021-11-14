@@ -1,0 +1,57 @@
+/* Declaration Syntax */
+
+keywords:
+						terms		statements
+	defined/proved		def(ine)	pr(o)v(e)
+
+	un[defin|prov]ed	prim(itive)	let
+	
+	well formed			form(ula)	syn(tax)
+
+prim <statement>
+prim <term>
+syn {syn <statement>}
+syn {form <term>?=<term>}
+
+prim :
+prim ;
+prim |
+form {<term>:<statement>}
+syn {<term>;<statment>}
+
+syn {prim <term>}
+syn {let <statement>}
+
+syn {def <term>;<statement>}
+
+prim <type-term>
+prim <object-term>
+syn {<object-term> \is <type-term>}
+form {<type-term> <object-term> ?= <object-term>: <object-term> \is <type-term>}
+form {<type-term> T <object-term> o ?= o: o \is T}
+
+/*
+the type of a term need to be mentioned only if it's not implied from syntax of a positive statement regarding it. and the statement hold true for all implied types.
+
+terms that are in english rather than symbolic have to have <>, following the example of BNF
+escaped english words are stand-ins for symbols so they don't have to have them.
+
+the keywords and ; require enclosing their compound arguments (statements or terms) in {} rather than ()
+
+overloading is possible, that is defining a term multiple times for different contexts
+
+{prim <object-term> O} imply {\exist O}
+*/
+
+/* Argument syntax */
+
+syn {<statement> \trfr <statement>}
+syn {prv {<statement> T|{<statement> S \trfr T}}}
+syn {prv {<statement> T|{\not T \trfr false}}}
+syn {prv {<statement> S \than <statement> T|{S \trfr T}}}
+
+/*
+\trfr is transitive. so {A \trfr B \trfr C} could be reduced to {A \trfr C}
+
+\trfr also enclose in {}
+*/
