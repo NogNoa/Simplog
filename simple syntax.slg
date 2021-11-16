@@ -34,14 +34,14 @@ prim <relation>
 form {(<term> t): (<relation> r) (<term> g) ?= t:t r g}
 
 /*
-the type of a term need to be mentioned only if it's not implied from syntax of a positive statement regarding it. and the statement hold true for all implied types.
+The type of a term need to be mentioned only if it's not implied from syntax of a positive statement regarding it. The statement hold true for all implied types.
 
-terms that are in english rather than symbolic have to have <>, following the example of BNF
-escaped english words are stand-ins for symbols so they don't have to have them.
+Terms that are in english rather than symbolic have to be enclosed by <>, following the example of BNF.
+Escaped english words are stand-ins for symbols so they don't have to have to be enclosed by them.
 
-the keywords and ; require enclosing their compound arguments (statements or terms) in {} rather than ()
+The keywords and ; require enclosing their compound arguments (statements or terms) in {} rather than (). The arguments of : could be eclosed by just ().
 
-overloading is possible, that is defining a term multiple times for different contexts
+Overloading is possible, that is- defining a term multiple times for different contexts
 
 {prim <object-term> O} imply {\exist O}
 */
@@ -56,5 +56,5 @@ syn {prv {<statement> S \than <statement> T|{S \trfr T}}}
 /*
 \trfr is transitive. so {A \trfr B \trfr C} could be reduced to {A \trfr C}
 
-\trfr also enclose in {}
+\trfr is also enclosed in {}
 */
