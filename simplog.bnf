@@ -1,20 +1,22 @@
 <term> ::= "(" <term> ")" | <type-term> | <object-term> | <qualified-term> | <relation-term>
 
-<qualified-term> ::= <type-term> <object-term>| <term> ":" <statement> | <term> ":" <relation-term> <term>
+<qualified-term> ::= <type-term> <object-term>| <term> ":" <statement> | <term> ":" "(" <statement> ")" | <term> ":" <decapitated-relation>
 
 <statement> ::= "{" <statement> "}" | <term-declaration> | <statement-declaration> | <predication-statement> | <relation-statement> | <argument> 
 
-<term-declaration> ::= "prim" <term> | "def" <predication-statement> | "form" <term> |"form" <term> "?=" <term>
+<term-declaration> ::= "prim" "{" <term> "}" | "def" "{" <predication-statement> "}" | "form" "{" <term> "}" | "form" "{" <term> "?=" <term> "}"
 
-<statement-declaration> ::= "let" <statement> | "syn" <statement>
+<statement-declaration> ::= "let" "{" <statement> "}" | "syn" "{" <statement> "}"
 
 <predication-statement> ::= <term> ";" <statment>
 
 <relation-statement> ::= <term> <relation-term> <term>
 
-<argument> ::= "prv" <statement> "|" <deduction>
+<decapitated-relation> ::= <relation-term> <term>
 
-<deduction> ::= "{" <deduction> "}" <statement> "\trfr" <statement> | <statement> "\trfr" <deduction> | <deduction> "\trfr" "false"
+<argument> ::= "prv" "{" <statement> "|" <deduction> "}"
+
+<deduction> ::= "{" <deduction> "}" | <statement> "\trfr" <statement> | <statement> "\trfr" <deduction> | <deduction> "\trfr" "false"
 
 <block-comment> ::= "/*" ("*"(^"/")|^"*")* "*/"
 
