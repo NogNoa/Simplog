@@ -1,12 +1,12 @@
 /* Declaration Syntax */
 
 keywords:
-						terms		statements
+                                terms		statements
 	defined/proved		def(ine)	pr(o)v(e)
 
 	un[defin|prov]ed	prim(itive)	let
 	
-	well formed			form(ula)	syn(tax)
+	well formed		form(ula)	syn(tax)
 
 prim <statement>
 prim <term>
