@@ -27,11 +27,12 @@ syn {def <term>;<statement>}
 prim <type-term>
 prim <object-term>
 syn {<object-term> \is <type-term>}
-form {<object-term>: <type-term> ?= <object-term>: <object-term> \is <type-term>}
-form {(o: <object-term>): (T: <type-term>) ?= o: o \is T}
 
 prim <relation>
-form {(t: <term> ): (r: <relation>) (g: <term>) ?= t:t r g}
+form {(t: t \is <term> ): (r: r \is  <relation>) (g: g \is  <term>) ?= t:t r g}
+form {(t:\is <term> ): (r: \is  <relation>) (g: \is  <term>) ?= t:t r g}
+
+form {(a:\is <term>),(b:\is <term>):(s:\is statement) ?= a:s \and b:s}
 
 /*
 The type of a term need to be mentioned only if it's not implied from syntax of a positive statement regarding it. The statement hold true for all implied types.
@@ -49,9 +50,9 @@ Overloading is possible, that is- defining a term multiple times for different c
 /* Argument syntax */
 
 syn {<statement> \trfr <statement>}
-syn {prv {(T: <statement>)| {(S: <statement>) \trfr T}}}
-syn {prv {(T: <statement>)|{\not T \trfr false}}}
-syn {prv {(S: <statement>) \than T|{S \trfr T}}}
+syn {prv {(T:\is <statement>)| {(S:\is <statement>) \trfr T}}}
+syn {prv {(T:\is <statement>)|{\not T \trfr false}}}
+syn {prv {(S:\is <statement>) \than T|{S \trfr T}}}
 
 /*
 \trfr is transitive. so {A \trfr B \trfr C} could be reduced to {A \trfr C}
