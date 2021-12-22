@@ -29,10 +29,13 @@ prim <object-term>
 syn {<object-term> \is <type-term>}
 
 prim <relation>
-form {(t: t \is <term> ): (r: r \is  <relation>) (g: g \is  <term>) ?= t:t r g}
-form {(t:\is <term> ): (r: \is  <relation>) (g: \is  <term>) ?= t:t r g}
+form {(t: t \is <term> ):(r: r \is  <relation>) (g: g \is  <term>) ?= t: t r g}
+form {(o:\is <object-term>): (T:\is <type-term>) ?= s:\is T}
 
-form {(a:\is <term>),(b:\is <term>):(s:\is statement) ?= a:s \and b:s}
+form {(t: <term> ):(r: <relation>) (g: <term>) ?= t: t r g}
+form {(o: <object-term>): (T: <type-term>) ?= s:\is T}
+
+form {(a: <term>),(b: <term>):(s:\is statement) ?= a:s \and b:s}
 
 /*
 The type of a term need to be mentioned only if it's not implied from syntax of a positive statement regarding it. The statement hold true for all implied types.
@@ -45,6 +48,9 @@ The keywords and ; require enclosing their compound arguments (statements or ter
 Overloading is possible, that is- defining a term multiple times for different contexts
 
 {prim <object-term> O} imply {\exist O}
+
+Specifically I prefer ":\is <statement>" over just ":<statement>" because otherwise it's confusing with <statement> standing for a full statement predicate rather than a type-object. 
+This level of shortening is bound to allow technical ambiguety so I'm not sure about it.
 */
 
 /* Argument syntax */
