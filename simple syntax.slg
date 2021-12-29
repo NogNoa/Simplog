@@ -32,9 +32,6 @@ prim <relation>
 form {(t: t \is <term> ):(r: r \is  <relation>) (g: g \is  <term>) ?= t: t r g}
 form {(t:   \is <term> ):(r:   \is <relation>)  (g:   \is  <term>) ?= t: t r g}
 
-form {(o:\is <object-term>) \is (T:\is <type-term>) ?= s:\is T}
-form {(o \is <object-term>) \is (T \is <type-term>) ?= s:\is T}
-
 form {(a:\is <term>),(b:\is <term>):(s:\is statement) ?= a:s \and b:s}
 
 /*
