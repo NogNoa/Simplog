@@ -11,34 +11,32 @@ keywords:
 prim <statement>
 prim <term>
 syn {syn <statement>}
-prim ?=
-syn {form <term>?=<term>}
+syn {form <term>}
 
+syn {prim <term>}
+syn {let <statement>}
 
 prim :
 form {<term>:<statement>}
 prim ;
 syn {<term>;<statment>}
-
-syn {prim <term>}
-syn {let <statement>}
+prim ?=
+syn {form <term>?=<term>}
 
 syn {def <term>;<statement>}
 
 prim <type-term>
 prim <object-term>
+prim \is
 syn {<object-term> \is <type-term>}
-
-prim \and
-syn {<statement> \and <statement>}
 
 prim ,
 form{<term>, <term>}
-form {(a, b: s) :{a:\is <term> \and b:\is <term> \and s:\is statement} ?= a:s, b:s}
-form {(a, b: s) :{a,b:\is <term> \and s:\is statement} ?= a:s, b:s}
+form {(a, b: s) :{a:a \is <term> \and b: b \is <term> \and s: s \is statement} ?= a:s, b:s}
+form {(a, b: s) :{a,b: a,b \is <term> \and s: s \is statement} ?= a:s, b:s}
 
 prim <relation>
-let {?=,\is,, \is <relation>}
+syn {<term> <relation> <term>}
 form {(t: r g): t,g \is <term> \and r \is <relation> ?= t: t r g}
 
 
