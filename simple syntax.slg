@@ -11,12 +11,13 @@ keywords:
 prim <statement>
 prim <term>
 syn {syn <statement>}
+prim ?=
 syn {form <term>?=<term>}
 
+
 prim :
-prim ;
-prim |
 form {<term>:<statement>}
+prim ;
 syn {<term>;<statment>}
 
 syn {prim <term>}
@@ -28,11 +29,18 @@ prim <type-term>
 prim <object-term>
 syn {<object-term> \is <type-term>}
 
-prim <relation>
-form {(t: t \is <term> ):(r: r \is  <relation>) (g: g \is  <term>) ?= t: t r g}
-form {(t:   \is <term> ):(r:   \is <relation>)  (g:   \is  <term>) ?= t: t r g}
+prim \and
+syn {<statement> \and <statement>}
 
-form {(a:\is <term>),(b:\is <term>):(s:\is statement) ?= a:s \and b:s}
+prim ,
+form{<term>, <term>}
+form {(a, b: s) :{a:\is <term> \and b:\is <term> \and s:\is statement} ?= a:s, b:s}
+form {(a, b: s) :{a,b:\is <term> \and s:\is statement} ?= a:s, b:s}
+
+prim <relation>
+let {?=,\is,, \is <relation>}
+form {(t: r g): t,g \is <term> \and r \is <relation> ?= t: t r g}
+
 
 /*
 The type of a term need to be mentioned only if it's not implied from syntax of a positive statement regarding it. The statement hold true for all implied types.
@@ -48,7 +56,7 @@ Overloading is possible, that is- defining a term multiple times for different c
 */
 
 /* Argument syntax */
-
+prim |
 syn {<statement> \trfr <statement>}
 syn {prv {(T:\is <statement>)| {(S:\is <statement>) \trfr T}}}
 syn {prv {(T:\is <statement>)|{\not T \trfr false}}}
