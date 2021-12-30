@@ -30,6 +30,9 @@ prim <object-term>
 prim \is
 syn {<object-term> \is <type-term>}
 
+prim \and
+syn {<statement> \and <statement>}
+
 prim ,
 form{<term>, <term>}
 form {(a, b: s) :{a:a \is <term> \and b: b \is <term> \and s: s \is statement} ?= a:s, b:s}
