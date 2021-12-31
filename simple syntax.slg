@@ -32,12 +32,13 @@ syn {<object-term> \is <type-term>}
 
 prim ,
 form{<term>, <term>}
-form {(a, b: s) :{a:a \is <term> \and b: b \is <term> \and s: s \is statement} ?= a:s, b:s}
-form {(a, b: s) :{a,b: a,b \is <term> \and s: s \is statement} ?= a:s, b:s}
+form {a:a \is <term>, b: b \is <term>, s: s \is statement; {a, b: s ?= a:s, b:s}}
+form {a,b: a,b \is <term>,            s: s \is statement; {a, b: s ?= a:s, b:s}}
 
 prim <relation>
 syn {<term> <relation> <term>}
-form {(t: r g): t,g \is <term> \and r \is <relation> ?= t: t r g}
+form {t,g: t,g \is <term>, r: r \is <relation>; {t:r g ?= t: t r g}}
+form {t,g:\is      <term>, r:\is    <relation>; {t:r g ?= t: t r g}}
 
 
 /*
