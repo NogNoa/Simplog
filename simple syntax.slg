@@ -40,6 +40,8 @@ syn {<term> <relation> <term>}
 form {t,g: t,g \is <term>, r: r \is <relation>; {t:r g ?= t: t r g}}
 form {t,g:\is      <term>, r:\is    <relation>; {t:r g ?= t: t r g}}
 
+form {t:\is <object-term>,  g:\is <type-term>; {(t g) ?= t:\is g}}
+form {(t   <object-term>), (g     <type-term>);{(t g) ?= t:\is g}}
 
 /*
 The type of a term need to be mentioned only if it's not implied from syntax of a positive statement regarding it. The statement hold true for all implied types.
@@ -57,9 +59,9 @@ Overloading is possible, that is- defining a term multiple times for different c
 /* Argument syntax */
 prim |
 syn {<statement> \trfr <statement>}
-syn {prv {(T:\is <statement>)| {(S:\is <statement>) \trfr T}}}
-syn {prv {(T:\is <statement>)|{\not T \trfr false}}}
-syn {prv {(S:\is <statement>) \than T|{S \trfr T}}}
+syn {prv {(T <statement>)| {(S <statement>) \trfr T}}}
+syn {prv {(T <statement>)|{\not T \trfr false}}}
+syn {prv {(S <statement>) \than T|{S \trfr T}}}
 
 /*
 \trfr is transitive. so {A \trfr B \trfr C} could be reduced to {A \trfr C}
