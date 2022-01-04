@@ -25,6 +25,11 @@ syn {form <term>?=<term>}
 
 syn {def <term>;<statement>}
 
+prim <set>
+prim =
+syn {def <term> = <set>}
+
+
 prim <type-term>
 prim <object-term>
 prim \is
