@@ -77,5 +77,5 @@ syn {prv {(S <statement>) \than T|{S \trfr T}}}
 \trfr is also enclosed in {}
 */
 
-def  {<list>; {t <type-term>; (<list> t)= '{x,v: x \is t \and v \is (<list> t)} \union t}}
-form {t <type-term>; (x,... : x t) ?= (<list> t)}
+def {<list>; {t <type-term>; (<list> t)= '{x,v: x \is t \and v \is (<list> t)} \union t}}
+def {...;{t <type-term>; (x,... : x t) ?= (<list> t)}}
