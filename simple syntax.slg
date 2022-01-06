@@ -67,9 +67,9 @@ Overloading is possible, that is- defining a term multiple times for different c
 /* Argument syntax */
 prim |
 syn {<statement> \trfr <statement>}
-syn {prv {(T <statement>)| {(S <statement>) \trfr T}}}
-syn {prv {(T <statement>)|{\not T \trfr false}}}
-syn {prv {(S <statement>) \than T|{S \trfr T}}}
+syn {prv {T <statement>| {S <statement> \trfr T}}}
+syn {prv {T <statement>| {\not T \trfr false}}}
+syn {prv {S <statement>  \than T| {S \trfr T}}}
 
 /*
 \trfr is transitive. so {A \trfr B \trfr C} could be reduced to {A \trfr C}
@@ -78,4 +78,4 @@ syn {prv {(S <statement>) \than T|{S \trfr T}}}
 */
 
 def {<list>; {t <type-term>; (<list> t)= '{x,v: x \is t \and v \is (<list> t)} \union t}}
-def {...;{t <type-term>; (x,... : x t) ?= (<list> t)}}
+def {... ; {t <type-term>; (x,... : x t) ?= (<list> t)}}
