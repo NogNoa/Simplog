@@ -46,10 +46,6 @@ form {t,g:\is      <term>, r:\is    <relation>; {t:r g ?= t: t r g}}
 form {t:\is <object-term>,  g:\is <type-term>; {t g ?= t:\is g}}
 form {t   <object-term>, g     <type-term>;{t g ?= t:\is g}}
 
-prim <set>
-prim \in
-prim \all
-syn {{def t; {\all a; b \in t}}: t \is <set>, a,b \is <term>}
 
 /*
 The type of a term need to be mentioned only if it's not implied from syntax of a positive statement regarding it. The statement hold true for all implied types.
