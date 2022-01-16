@@ -1,6 +1,6 @@
 <term> ::= "(" <term> ")" | <type-term> | <object-term> | <qualified-term> | <relation-term> | <term> "," <term> 
 
-<qualified-term> ::= <object-term> <type-term> | <term> ":" <statement> | <term> ":" "(" <statement> ")" | <term> ":" <decapitated-relation>
+<qualified-term> ::= <object-term> <type-term> | <term> ":" <statement> | <term> ":" <decapitated-relation>
 
 <statement> ::= "{" <statement> "}" | <term-declaration> | <statement-declaration> | <predication-statement> | <relation-statement> | <argument> | <statement> "\and" <statement>
 

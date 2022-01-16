@@ -53,11 +53,11 @@ The type of a term need to be mentioned only if it's not implied from syntax of 
 Terms that are in english rather than symbolic have to be enclosed by <>, following the example of BNF.
 Escaped english words are stand-ins for symbols so they don't have to have to be enclosed by them.
 
-The keywords and ; require enclosing their compound arguments (statements or terms) in {} rather than (). The arguments of : could be eclosed by just ().
+Statments should only be enclosed with {}, not (). Terms could be enclosed in ().
 
 Overloading is possible, that is- defining a term multiple times for different contexts
 
-{prim <object-term> O} imply {\exist O}
+{prim <object-term> O} imply {\exist O}. the same is true for def .
 */
 
 /* Argument syntax */
@@ -75,3 +75,4 @@ syn {prv {S <statement>  \than T| {S \trfr T}}}
 
 def {<list>; {t <type-term>; (<list> t)= '{x,v: x \is t \and v \is (<list> t)} \union t}}
 def {... ; {t <type-term>; (x,... : x t) ?= (<list> t)}}
+form {l (<list> <term>), f <function>; (f(l) \for l \in l)}
