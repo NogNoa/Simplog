@@ -1,3 +1,3 @@
 def {<list>; {t <type-term>; (<list> t)= '{x,v: x \is t \and v \is (<list> t)} \union t}}
 def {... ; {t <type-term>; (x,... : x t) ?= (<list> t)}}
-form {l (<list> <term>), f <function>; (f(l) \for l \in l)}
+form {l (<list> t): {t \is <type-term>}, f <function>:{f \on t}; f(@l)}
