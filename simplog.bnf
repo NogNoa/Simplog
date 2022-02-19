@@ -2,13 +2,13 @@
 
 <qualified-term> ::= <object-term> <type-term> | <term> ":" <statement> | <term> ":" <decapitated-relation>
 
-<statement> ::= "{" <statement> "}" | <term-declaration> | <statement-declaration> | <predication-statement> | <relation-statement> | <argument> | <statement> "\and" <statement>
+<statement> ::= "{" <statement> "}" | <term-declaration> | <statement-declaration> | <predication-statement> | <relation-statement> | <argument> | <statement> "\and" <statement> 
 
 <term-declaration> ::= "prim" "{" <term> "}" | "def" "{" <predication-statement> "}" | "form" "{" <term> "}" | "form" "{" <term> "?=" <term> "}"
 
 <statement-declaration> ::= "let" "{" <statement> "}" | "syn" "{" <statement> "}"
 
-<predication-statement> ::= <term> ";" <statment>
+<predication-statement> ::= <term> ";" <statment> | <term> ";" <decapitated-relation>
 
 <relation-statement> ::= <term> <relation-term> <term>
 
