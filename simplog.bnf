@@ -16,7 +16,7 @@
 
 <argument> ::= "prv" "{" <statement> "|" <deduction> "}"
 
-<deduction> ::= "{" <deduction> "}" | <statement> "\trfr" <statement> | <statement> "\trfr" <deduction> | <deduction> "\trfr" "false"
+<deduction> ::= "{" <deduction> "}" | <statement> "\trfr" <statement> | <statement> "\trfr" <deduction> | <deduction> "\trfr" "F"
 
 <block-comment> ::= "/*" ("*"(^"/")|^"*")* "*/"
 
