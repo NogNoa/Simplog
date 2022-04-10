@@ -8,3 +8,6 @@ form {\all t::<type-term>;{ l:: (<list> t); l[0] ?= (a:: t : {\exist v:: (<list>
 form {\all t::<type-term>;{ l:: (<list> t); l[ε] ?= (a:: t : {\exist v:: (<list> t): l=v,a})}
 form {\all t::<type-term>;{ l:: (<list> t); l[1..ε] ?= (v:: (<list> t) : {\exist a:: t: l=a,v})}
 form {\all t::<type-term>;{ l:: (<list> t); l[0..-1] ?= (v:: (<list> t) : {\exist a:: t: l=v,a})}
+
+def {<koinon>; {t:: <type-term>, r:: (k: k \is <operator> \or k \is <relation>); (<koinon> r t)= '{xrv: x \is t \and v \is (<koinon> r t)} \union t}}
+def {<flush>; {t:: <type-term>; (<flush> t)= '{xv: x \is t \and v \is (<flush> t)} \union t}}
