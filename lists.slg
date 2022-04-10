@@ -2,3 +2,9 @@ def {<list>; {t:: <type-term>; (<list> t)= '{x,v: x \is t \and v \is (<list> t)}
 def {... ; {t:: <type-term>; (x,... : x:: t) ?= (<list> t)}}
 form {f(@l): {l:: (<list> t): {t \is <type-term>}, f <function>:{f \on t}}}
 form {l:: (<list> t), e t; f(@(e,l)) ?= (f(e),f(@l))}
+
+let {\all t:: <type-term>; {\all l: \is (<list> t); l \is <list>}}
+form {\all t::<type-term>;{ l:: (<list> t); l[0] ?= (a:: t : {\exist v:: (<list> t): l=a,v})}
+form {\all t::<type-term>;{ l:: (<list> t); l[ε] ?= (a:: t : {\exist v:: (<list> t): l=v,a})}
+form {\all t::<type-term>;{ l:: (<list> t); l[1..ε] ?= (v:: (<list> t) : {\exist a:: t: l=a,v})}
+form {\all t::<type-term>;{ l:: (<list> t); l[0..-1] ?= (v:: (<list> t) : {\exist a:: t: l=v,a})}
