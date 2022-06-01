@@ -4,9 +4,20 @@ form {f(@l): {l:: (<list> t): {t \is <type-term>}, f <function>:{f \on t}}}
 form {l:: (<list> t), e t; f(@(e,l)) ?= (f(e),f(@l))}
 
 let {\all t:: <type-term>; {\all l: \is (<list> t); l \is <list>}}
-form {\all t::<type-term>;{ l:: (<list> t); l[0] ?= (a:: t : {\exist v:: (<list> t): l=a,v})}
-form {\all t::<type-term>;{ l:: (<list> t); l[ε] ?= (a:: t : {\exist v:: (<list> t): l=v,a})}
+
+form {\all t::<type-term>;{\all l:: (<list> t); {\all x: \is \NN \and \exist l[x]; l[x] \is t}
+form {\all t::<type-term>;{\all l:: (<list> t); l[0] ?= (a:: t : {\exist v:: (<list> t): l=a,v})}
+
+form {\all t::<type-term>;{\all l:: (<list> t); {\all x,y: \is \NN \and \exist l[x..y]; l[x..y] \is (list t)}
+form {ε|{\all l:: <list>; \exist ε: l[0..ε] ?= l}}}
+def {\all l:: <list>, x:: \NN; \exist l[x] \iff {x >= 0 \and ε > x}}
+def {\all l:: <list>, x,y:: \NN; \exist l[x..y] \iff {x >= 0 \and y >= x \and ε > y}}
+
+
 form {\all t::<type-term>;{ l:: (<list> t); l[1..ε] ?= (v:: (<list> t) : {\exist a:: t: l=a,v})}
+
+
+form {\all t::<type-term>;{ l:: (<list> t); l[ε-1] ?= (a:: t : {\exist v:: (<list> t): l=v,a})}
 form {\all t::<type-term>;{ l:: (<list> t); l[0..-1] ?= (v:: (<list> t) : {\exist a:: t: l=v,a})}
 
 def {<koinon>; {t:: <type-term>, r:: (k: k \is <operator> \or k \is <relation>); (<koinon> r t)= '{xrv: x \is t \and v \is (<koinon> r t)} \union t}}
