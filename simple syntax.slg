@@ -22,6 +22,7 @@ prim ;
 syn {<term>;<statment>}
 prim ?=
 syn {form <term>?=<term>}
+syn {form {<term>?=<term>}; <statement>}
 
 syn {def <term>;<statement>}
 
@@ -77,6 +78,10 @@ syn {prv {S::<statement>  \than T::<statement>| S \trfr T}}
 \trfr is transitive. so {A \trfr B \trfr C} could be reduced to {A \trfr C}
 
 \trfr is also enclosed in {}
+{} sould include either
+1. a statment without trfr
+2. a string of therfores
+3. a string of \ands terminated with a terfore 
 */
 
 
