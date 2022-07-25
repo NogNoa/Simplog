@@ -22,7 +22,6 @@ prim ;
 syn {<term>;<statment>}
 prim ?=
 syn {form <term>?=<term>}
-syn {form {<term>?=<term>}; <statement>}
 
 syn {def <term>;<statement>}
 
