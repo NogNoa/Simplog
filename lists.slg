@@ -39,5 +39,5 @@ form {[τ]; {\all l:: <list>; l[τ]?= l[len(l)]}}
 def <range>:: <type-term>
 def {..:: <operator>; \all i,j:: \NN: j>i; {i..j \is <range>}}
 def {[]:: <operator>; {\all l:: <list>, i,j:: \NN: (len(l)>j>i); \exist (l[i..j]:: <list>)}}
-def {[0..τ] <operator>; {\all l:: <list>; l[0..τ]=l}}
-let { 
+let {\all l:: <list>; l[0..τ]=l}
+let {\all l:: <list>, i,j:: \NN; {l[i..j] = l[i],l[i+1..j] = l[i..j-1],l[j]}}
