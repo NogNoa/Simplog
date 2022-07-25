@@ -29,11 +29,13 @@ def {<list>:: <type-term>; {\all t:: <type-term>; {\exist (<list> t):\sbst <list
 def {(<list> t):: <type-term>; {t:: <type-term>; (<list> t)= '{x,v: x \is t \and v \is (<list> t)} \union t}}
 
 let {\all l,r:: <list>; \exist (l,r):: <list>}
-def {[0]:: <operator>; {\all t:: <type-term>; {\all x:: t, v::(<list> t); {(l:: (<list> t):=(x,v)); l[0]=x}}}}
+def {[0]:: <unary-operator>; {\all t:: <type-term>; {\all x:: t, v::(<list> t); {(l:: (<list> t):=(x,v)); l[0]=x}}}}
 def {[]:: <operator>; {\all t:: <type-term>; {\all x:: t, v,u::(<list> t); {l:: (<list> t), i:: \NN :{l=(u,x,v), and x=l[i]};  l[i+1]=v[0]}}}}
 
 def {len:: function; {\all t:: <type-term>; {{\all x:: t; len(x)=1} \and {\all v,u:: (<list> t); {len(v,u) = len(v) + len(u)}}}}}
 let {\all l <list>; {\all i:: \NN :\< len(l); \exist l[i]}}
 form {[τ]; {\all l:: <list>; l[τ]?= l[len(l)]}}
 
-def {<range>:: <type-term>; \all l:: <list>, r:: <range>: \exist l[r]; l[r] \is <list>}
+def <range>:: <type-term>
+def {..:: <operator>; \all i,j:: \NN: j>i; {i..j \is <range>}}
+def {[]:: <operator>; \all l:: <list>, r:: <range>; l[r]  
