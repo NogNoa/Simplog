@@ -23,4 +23,9 @@ form {\all t::<type-term>;{ l:: (<list> t); l[0..-1] ?= (v:: (<list> t) : {\exis
 def {<koinon>; {t:: <type-term>, r:: (k: k \is <operator> \or k \is <relation>); (<koinon> r t)= '{xrv: x \is t \and v \is (<koinon> r t)} \union t}}
 def {<flush>; {t:: <type-term>; (<flush> t)= '{xv: x \is t \and v \is (<flush> t)} \union t}}
 
+
+
+def {<list>:: <unitary-operator>; {t:: <type-term>; (<list> t)= '{x,v: x \is t \and v \is (<list> t)} \union t}}
+def {<list>:: <type-term>; {\all t:: <type-term>; (<list> t) \is <list>}} 
+
 def {len:: function; {\all t:: <type-term>; {{\all x:: t; len(x)=1} \and {\all v,u:: (<list> t); {len(v,u) = len(v) + len(u)}}}}}
