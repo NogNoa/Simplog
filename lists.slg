@@ -30,8 +30,10 @@ def {(<list> t):: <type-term>; {t:: <type-term>; (<list> t)= '{x,v: x \is t \and
 
 let {\all l,r:: <list>; \exist (l,r):: <list>}
 def {[0]:: <operator>; {\all t:: <type-term>; {\all x:: t, v::(<list> t); {(l:: (<list> t):=(x,v)); l[0]=x}}}}
-def {[]:: <operator>; {\all t:: <type-term>; {\all x:: t, v,u::(<list> t); {l:: (<list> t), i:: <integer> :{l=(u,x,v), and x=l[i]};  l[i+1]=v[0]}}}}
+def {[]:: <operator>; {\all t:: <type-term>; {\all x:: t, v,u::(<list> t); {l:: (<list> t), i:: \NN :{l=(u,x,v), and x=l[i]};  l[i+1]=v[0]}}}}
 
 def {len:: function; {\all t:: <type-term>; {{\all x:: t; len(x)=1} \and {\all v,u:: (<list> t); {len(v,u) = len(v) + len(u)}}}}}
-let {\all l <list>; {\all i:: <integer> :\< len(l); \exist l[i]}
-form {[τ]; {\all l:: <list>; {\all i <integer>; l[τ-i]?= l[len(l)-i]}}}
+let {\all l <list>; {\all i:: \NN :\< len(l); \exist l[i]}}
+form {[τ]; {\all l:: <list>; l[τ]?= l[len(l)]}}
+
+def {<range>:: <type-term>; \all l:: <list>, r:: <range>: \exist l[r]; l[r] \is <list>}
