@@ -9,16 +9,18 @@ form {\all t::<type-term>;{\all l:: (<list> t); {\all x: \is \NN \and \exist l[x
 form {\all t::<type-term>;{\all l:: (<list> t); l[0] ?= (a:: t : {\exist v:: (<list> t): l=a,v})}
 
 form {\all t::<type-term>;{\all l:: (<list> t); {\all x,y: \is \NN \and \exist l[x..y]; l[x..y] \is (list t)}
-form {ε|{\all l:: <list>; \exist ε: l[0..ε] ?= l}}}
-def {\all l:: <list>, x:: \NN; \exist l[x] \iff {x >= 0 \and ε > x}}
-def {\all l:: <list>, x,y:: \NN; \exist l[x..y] \iff {x >= 0 \and y >= x \and ε > y}}
+form {τ|{\all l:: <list>; \exist τ: l[0..τ] ?= l}}}
+def {\all l:: <list>, x:: \NN; \exist l[x] \iff {x >= 0 \and τ > x}}
+def {\all l:: <list>, x,y:: \NN; \exist l[x..y] \iff {x >= 0 \and y >= x \and τ > y}}
 
 
-form {\all t::<type-term>;{ l:: (<list> t); l[1..ε] ?= (v:: (<list> t) : {\exist a:: t: l=a,v})}
+form {\all t::<type-term>;{ l:: (<list> t); l[1..τ] ?= (v:: (<list> t) : {\exist a:: t: l=a,v})}
 
 
-form {\all t::<type-term>;{ l:: (<list> t); l[ε-1] ?= (a:: t : {\exist v:: (<list> t): l=v,a})}
+form {\all t::<type-term>;{ l:: (<list> t); l[τ-1] ?= (a:: t : {\exist v:: (<list> t): l=v,a})}
 form {\all t::<type-term>;{ l:: (<list> t); l[0..-1] ?= (v:: (<list> t) : {\exist a:: t: l=v,a})}
 
 def {<koinon>; {t:: <type-term>, r:: (k: k \is <operator> \or k \is <relation>); (<koinon> r t)= '{xrv: x \is t \and v \is (<koinon> r t)} \union t}}
 def {<flush>; {t:: <type-term>; (<flush> t)= '{xv: x \is t \and v \is (<flush> t)} \union t}}
+
+def {len:: function; {\all t:: <type-term>; {\all x:: t; {len(x)=1 \and {\all v:: (<list> t); {len(v,x) = len(v) + 1}}}}}}
