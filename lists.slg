@@ -29,6 +29,8 @@ def {<list>:: <type-term>; {\all t:: <type-term>; {\exist (<list> t):\sbst <list
 def {(<list> t):: <type-term>; {t:: <type-term>; (<list> t)= '{x,v: x \is t \and v \is (<list> t)} \union t}}
 
 let {\all l,r:: <list>; \exist (l,r):: <list>}
+def {[0]:: <operator>; {\all t:: <type-term>; {\all x:: t, v::(<list> t); {(l:: (<list> t):=(x,v)); l[0]=x}}}}
+def {[]:: <operator>; {\all t:: <type-term>; {\all x:: t, v,u::(<list> t); {l:: (<list> t), i:: <integer> :{l=(u,x,v), and x=l[i]};  l[i+1]=v[0]}}}}
 
 
 def {len:: function; {\all t:: <type-term>; {{\all x:: t; len(x)=1} \and {\all v,u:: (<list> t); {len(v,u) = len(v) + len(u)}}}}}
