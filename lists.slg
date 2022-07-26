@@ -1,12 +1,10 @@
-def {<list>; {t:: <type-term>; (<list> t)= '{x,v: x \is t \and v \is (<list> t)} \union t}}
 def {... ; {t:: <type-term>; (x,... : x:: t) ?= (<list> t)}}
 form {f(@l): {l:: (<list> t): {t \is <type-term>}, f <function>:{f \on t}}}
 form {l:: (<list> t), e:: t; f(@(e,l)) ?= (f(e),f(@l))}
 
 
 
-def {<list>:: <type-term>; {\all t:: <type-term>; {\exist (<list> t):\sbst <list>}}
-def {(<list> t):: <type-term>; {t:: <type-term>; (<list> t)= '{x,v: x \is t \and v \is (<list> t)} \union t}}
+def {<list>:: <type-term>; {\all t:: <type-term>; \exist (<list> t):{= '{x,v: x \is t \and v \is (<list> t)} \union t \and \sbst <list>}}}
 let {\all l,r:: <list>; \exist (l,r):: <list>}
 
 def {[]:: <operator>; {\all t:: <type-term>; {\all x:: t, v,u::(<list> t); {l:: (<list> t), i:: \NN :{l=(u,x,v), and x=l[i]};  l[i+1]=v[0]}}}}
@@ -17,8 +15,8 @@ let {\all l <list>; {\all i:: \NN :\< len(l); \exist l[i]}}
 form {[τ]; {\all l:: <list>; l[τ]?= l[len(l)]}}
 
 def <range>:: <type-term>
-def {..:: <operator>; \all i,j:: \NN: j>i; {i..j \is <range>}}
-def {[]:: <operator>; {\all l:: <list>, i,j:: \NN: (len(l)>j>i); \exist (l[i..j]:: <list>)}}
+def {..:: <operator>; \all i,j:: \NN: j≥i; {i..j \is <range>}}
+def {[]:: <operator>; {\all l:: <list>, i,j:: \NN: (len(l)≥j≥i); \exist (l[i..j]:: <list>)}}
 let {\all l:: <list>; l[0..τ]=l}
 let {\all l:: <list>, i,j:: \NN; {l[i..j] = l[i],l[i+1..j] = l[i..j-1],l[j]}}
 
