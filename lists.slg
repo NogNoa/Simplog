@@ -24,4 +24,20 @@ let {\all l:: <list>, i,j:: \NN; {l[i..j] = l[i],l[i+1..j] = l[i..j-1],l[j]}}
 
 
 def {<koinon>; {t:: <type-term>, r:: (k: k \is <operator> \or k \is <relation>); (<koinon> r t)= '{xrv: x \is t \and v \is (<koinon> r t)} \union t}}
-def {<flush>; {t:: <type-term>; (<flush> t)= '{xv: x \is t \and v \is (<flush> t)} \union t}}
+
+
+
+def {<flush>:: <unitary-operator>; {\all t:: <type-term>; \exist (<flush> t):: <type-term>; {(<flush> t)= '{xv: x \is t \and v \is (<flush> t)} \union t}}}
+def {<flush>:: <type-term>; {\all t:: <type-term>; {(<flush> t):\sbst <flush>)}}}
+let {\all l,r:: <flush>; \exist (lr):: <flush>}
+
+def {[]:: <operator>; {\all t:: <type-term>; {\all x:: t, v,u::(<flush> t); {l:: (<flush> t), i:: \NN :{l=(uxv), and x=l[i]};  l[i+1]=v[0]}}}}
+let {\all t:: <type-term>; {\all x:: t, v::(<flush> t); {(l:: (<flush> t):=(xv)); l[0]=x}}}
+
+def {len:: function; {\all t:: <type-term>; {{\all x:: t; len(x)=1} \and {\all v,u:: (<flush> t); {len(vu) = len(v) + len(u)}}}}}
+let {\all l <flush>; {\all i:: \NN :\< len(l); \exist l[i]}}
+form {[τ]; {\all l:: <flush>; l[τ]?= l[len(l)]}}
+
+def {[]:: <operator>; {\all l:: <flush>, i,j:: \NN: (len(l)≥j≥i); \exist (l[i..j]:: <flush>)}}
+let {\all l:: <flush>; l[0..τ]=l}
+let {\all l:: <flush>, i,j:: \NN; {l[i..j] = l[i]l[i+1..j] = l[i..j-1]l[j]}}
