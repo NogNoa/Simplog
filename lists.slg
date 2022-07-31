@@ -4,9 +4,8 @@ form {l:: (<list> t), e:: t; f(@(e,l)) ?= (f(e),f(@l))}
 
 
 
-prim (<list>:: <type-term>)
-def {{<list>):: <unitary-operator>; {\all t:: <type-term>; {\exist ((<list> t):: <type-term> :\sbst <list>)}}
-let {\all t:: <type-term>; {(<list> t)= '{x,v: x \is t \and v \is (<list> t)} \union t}}
+def {<list>):: <unitary-operator>;{\all t:: <type-term>; {\exist (<list> t):: <type-term>; (<list> t)= '{x,v: x \is t \and v \is (<list> t)} \union t}}}
+def {<list>:: <type-term>; {\all t:: <type-term>; {(<list> t):\sbst <list>)}}
 let {\all l,r:: <list>; \exist (l,r):: <list>}
 
 def {[]:: <operator>; {\all t:: <type-term>; {\all x:: t, v,u::(<list> t); {l:: (<list> t), i:: \NN :{l=(u,x,v), and x=l[i]};  l[i+1]=v[0]}}}}
