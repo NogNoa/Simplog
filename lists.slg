@@ -6,7 +6,27 @@ form {l:: (<list> t), e:: t; f(@(e,l)) ?= (f(e),f(@l))}
 
 def {<list>):: <unitary-operator>;{\all t:: <type-term>; {\exist (<list> t):: <type-term>; (<list> t)= '{x,v: x \is t \and v \is (<list> t)} \union t}}}
 def {<list>:: <type-term>; {\all t:: <type-term>; {(<list> t):\sbst <list>)}}
-let {\all l,r:: <list>; \exist (l,r):: <list>}
+prv {\all t:: <type-term>;{\all l,r:: (<list> t); \exist (l,r):: (<list> t)}|
+	prv {l: \is t, r: \is (<list> t)\\t; \exist (l,r):: (<list> t)|
+		(<list> t) = '{x,v: x \is t \and v \is (<list> t)} \union t \and
+		(l,r) \in '{x,v: x \is t \and v \is (<list> t)} \trfr
+		(l,r) \in (<list> t)
+	}
+	prv {l,r: \is t; \exist (l,r):: (<list> t)
+		{{	r \in t \trfr
+			r \in (<list> t)}\and
+			l \in t} \trfr
+		(l,r) \in '{x,v: x \is t \and v \is (<list> t)} \trfr
+		(l,r) \in (<list> t)
+	}
+	prv {l,r: \is (<list> t)\\t; \exist (l,r):: (<list> t)
+		{	(<list> t)\\t= '{x,v: x \is t \and v \is (<list> t)} \trfr
+			l \in '{x,v: x \is t \and v \is (<list> t)} \trfr
+			{\exist x:: t, v:: (<list> t); l=(x,v)
+			/* induction step */}}
+		
+	}	
+}
 
 def {[]:: <operator>; {\all t:: <type-term>; {\all x:: t, v,u::(<list> t); {l:: (<list> t), i:: \NN :{l=(u,x,v), and x=l[i]};  l[i+1]=v[0]}}}}
 let {\all t:: <type-term>; {\all x:: t, v::(<list> t); {(l:: (<list> t):=(x,v)); l[0]=x}}}
