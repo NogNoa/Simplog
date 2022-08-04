@@ -6,13 +6,14 @@ form {l:: (<list> t), e:: t; f(@(e,l)) ?= (f(e),f(@l))}
 
 def {<list>):: <unitary-operator>;{\all t:: <type-term>; {\exist (<list> t):: <type-term>; (<list> t)= '{x,v: x \is t \and v \is (<list> t)} \union t}}}
 def {<list>:: <type-term>; {\all t:: <type-term>; {(<list> t):\sbst <list>)}}
-prv {\all t:: <type-term>;{\all l,r:: (<list> t); \exist (l,r):: (<list> t)}|
-	prv {l: \is t, r: \is (<list> t)\\t; \exist (l,r):: (<list> t)|
+let {\all l,r:: <list>; \exist (l,r)}
+prv {\all t:: <type-term>;{\all l,r:: (<list> t); (l,r):: (<list> t)}|
+	prv {l: \is t, r: \is (<list> t)\\t; (l,r):: (<list> t)|
 		(<list> t) = '{x,v: x \is t \and v \is (<list> t)} \union t \and
 		(l,r) \in '{x,v: x \is t \and v \is (<list> t)} \trfr
 		(l,r) \in (<list> t)
 	}
-	prv {l,r: \is t; \exist (l,r):: (<list> t)|
+	prv {l,r: \is t; (l,r):: (<list> t)|
 		{{	r \in t \trfr
 			r \in (<list> t)} \and l \in t} \trfr
 		(l,r) \in '{x,v: x \is t \and v \is (<list> t)} \trfr
@@ -23,9 +24,9 @@ prv {\all t:: <type-term>;{\all l,r:: (<list> t); \exist (l,r):: (<list> t)}|
 		l \in '{x,v: x \is t \and v \is (<list> t)} \trfr
 		\exist x:: t, v:: (<list> t); l=(x,v)
 	}
-	prv {l,r:: (<list> t)\\t : {y:: t, u:: (<list> t): l=y,u; \exist (u,r):: (<list> t)}; \exist (l,r):: (<list> t)
-		{	(l,r)=(y,u,r)=(y,(u,r))} \and {y:: t, (u,r):: (<list> t) \trfr
-												(y,(u,r)):: (<list> t)} \trfr
+	prv {l,r:: (<list> t)\\t : {x:: t, v:: (<list> t): l=x,v; \exist (v,r):: (<list> t)}; (l,r):: (<list> t)
+		{	(l,r)=(x,v,r)=(x,(v,r))} \and {x:: t, (v,r):: (<list> t) \trfr
+												(x,(v,r)):: (<list> t)} \trfr
 			(l,r):: (<list> t)
 		}
 	}	
