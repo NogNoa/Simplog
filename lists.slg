@@ -12,19 +12,22 @@ prv {\all t:: <type-term>;{\all l,r:: (<list> t); \exist (l,r):: (<list> t)}|
 		(l,r) \in '{x,v: x \is t \and v \is (<list> t)} \trfr
 		(l,r) \in (<list> t)
 	}
-	prv {l,r: \is t; \exist (l,r):: (<list> t)
+	prv {l,r: \is t; \exist (l,r):: (<list> t)|
 		{{	r \in t \trfr
-			r \in (<list> t)}\and
-			l \in t} \trfr
+			r \in (<list> t)} \and l \in t} \trfr
 		(l,r) \in '{x,v: x \is t \and v \is (<list> t)} \trfr
 		(l,r) \in (<list> t)
 	}
-	prv {l,r:: (<list> t)\\t : {\exist y:: t, u:: (<list> t): {l=y,u \and \exist (u,r):: (<list> t)}}; \exist (l,r):: (<list> t)
-		{	(<list> t)\\t= '{x,v: x \is t \and v \is (<list> t)} \trfr
-			l \in '{x,v: x \is t \and v \is (<list> t)} \trfr
-			{\exist x:: t, v:: (<list> t); l=(x,v)
-			/* induction step */}}
-		
+	prv {l:: (<list> t)\\t; {\exist x:: t, v:: (<list> t); l=(x,v)}|
+		(<list> t)\\t= '{x,v: x \is t \and v \is (<list> t)} \trfr
+		l \in '{x,v: x \is t \and v \is (<list> t)} \trfr
+		\exist x:: t, v:: (<list> t); l=(x,v)
+	}
+	prv {l,r:: (<list> t)\\t : {y:: t, u:: (<list> t): l=y,u; \exist (u,r):: (<list> t)}; \exist (l,r):: (<list> t)
+		{	(l,r)=(y,u,r)=(y,(u,r))} \and {y:: t, (u,r):: (<list> t) \trfr
+												(y,(u,r)):: (<list> t)} \trfr
+			(l,r):: (<list> t)
+		}
 	}	
 }
 
