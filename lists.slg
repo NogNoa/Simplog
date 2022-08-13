@@ -17,25 +17,21 @@ prv {\all t:: <type-term>;{\all l,r:: (<list> t); (l,r):: (<list> t)}|
 		(<list> t) = '{x,v: x \is t \and v \is (<list> t)} \union t \and
 		(l,r) \in '{x,v: x \is t \and v \is (<list> t)} \trfr
 		(l,r) \in (<list> t)
-	}
+	} \and
 	prv {l,r:: t; (l,r):: (<list> t)|
 		{{	r \in t \trfr
 			r \in (<list> t)} \and l \in t} \trfr
 		(l,r) \in '{x,v: x \is t \and v \is (<list> t)} \trfr
 		(l,r) \in (<list> t)
-	}
-	prv {l,r:: (<list> t)\\t : {x:: t, v:: (<list> t): l=x,v; \exist (v,r):: (<list> t)}; (l,r):: (<list> t)
+	} \and
+	prv {l:: (<list> t)\\t r:: (<list> t): {x:: t, v:: (<list> t): l=x,v; \exist (v,r):: (<list> t)}; (l,r):: (<list> t)
 		{	{(l,r)=(x,v,r)=(x,(v,r))} \and {x:: t, (v,r):: (<list> t) \trfr
 												  (x,(v,r)):: (<list> t)} \trfr
 			(l,r):: (<list> t)
 		}
-	}
-	prv {l:: (<list> t)\\t, r:: t : {x:: t, v:: (<list> t): l=x,v; \exist (v,r):: (<list> t)}; (l,r):: (<list> t)|
-	{
-	
-	}
-	
-}	
+	} \trfr
+	{\all l,r:: (<list> t); (l,r):: (<list> t)}
+}
 	
 
 
