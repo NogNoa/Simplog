@@ -32,7 +32,7 @@
             <Keywords name="Keywords6"></Keywords>
             <Keywords name="Keywords7"></Keywords>
             <Keywords name="Keywords8"></Keywords>
-            <Keywords name="Delimiters">00&lt; 01\ 02&gt; 03{ 04\ 05} 06( 07 08) 09 10\ 11 12 13 14 15 16 17 18 19 20 21 22 23</Keywords>
+            <Keywords name="Delimiters">00&lt; 01&apos; 02&gt; 03{ 04&apos; 05} 06( 07&apos; 08) 09 10&apos; 11 12 13 14 15 16 17 18 19 20 21 22 23</Keywords>
         </KeywordLists>
         <Styles>
             <WordsStyle name="DEFAULT" fgColor="C0C0C0" bgColor="2A2A2A" fontStyle="0" nesting="0" />
@@ -52,7 +52,7 @@
             <WordsStyle name="FOLDER IN CODE2" fgColor="000000" bgColor="FFFFFF" fontStyle="0" nesting="0" />
             <WordsStyle name="FOLDER IN COMMENT" fgColor="000000" bgColor="FFFFFF" fontStyle="0" nesting="0" />
             <WordsStyle name="DELIMITERS1" fgColor="FF8080" bgColor="2A2A2A" fontName="Lato" fontStyle="2" nesting="0" />
-            <WordsStyle name="DELIMITERS2" fgColor="D2A8D9" bgColor="2A2A2A" fontName="Cascadia Mono PL" fontStyle="0" nesting="16780295" />
+            <WordsStyle name="DELIMITERS2" fgColor="D6A4DD" bgColor="2A2A2A" fontName="Cascadia Mono PL" fontStyle="0" nesting="16780295" />
             <WordsStyle name="DELIMITERS3" fgColor="9BA4DB" bgColor="2A2A2A" fontName="Cascadia Code PL Light" fontStyle="0" nesting="16777223" />
             <WordsStyle name="DELIMITERS4" fgColor="BBD7CE" bgColor="2A2A2A" fontStyle="0" nesting="0" />
             <WordsStyle name="DELIMITERS5" fgColor="000000" bgColor="FFFFFF" fontStyle="0" nesting="0" />

@@ -38,7 +38,7 @@ prv {\all t:: <type-term>;{\all l,r:: (<list> t); (l,r):: (<list> t)}|
 def {[]:: <operator>; {\all t:: <type-term>; {\all x:: t, v,u::(<list> t); {l:: (<list> t), i:: \NN :{l=(u,x,v), and x=l[i]};  l[i+1]=v[0]}}}}
 let {\all t:: <type-term>; {\all x:: t, v::(<list> t); {(l:: (<list> t):=(x,v)); l[0]=x}}}
 
-def {len:: function; {\all t:: <type-term>; {{\all x:: t; len(x)=1} \and {\all v,u:: (<list> t); {len(v,u) = len(v) + len(u)}}}}}
+def {len:: function; {\all t:: <type-term>; {{\all x:: t; len(x)=1} \and {\all v,u:: (<list> t); {len((v,u)) = len(v) + len(u)}}}}}
 let {\all l <list>; {\all i:: \NN :\< len(l); \exist l[i]}}
 form {[τ]; {\all l:: <list>; l[τ]?= l[len(l)]}}
 
@@ -50,7 +50,7 @@ let {\all l:: <list>, i,j:: \NN; {l[i..j] = l[i],l[i+1..j] = l[i..j-1],l[j]}}
 
 
 
-def {<koinon>; {t:: <type-term>, r:: (k: k \is <operator> \or k \is <relation>); (<koinon> r t)= '{xrv: x \is t \and v \is (<koinon> r t)} \union t}}
+def {<koinon>; {t:: <type-term>, r:: (<operator> \union <relation>); (<koinon> r t)= '{xrv: x \is t \and v \is (<koinon> r t)} \union t}}
 
 
 
