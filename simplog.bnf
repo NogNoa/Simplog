@@ -6,7 +6,7 @@
 
 <term-declaration> ::= "prim" "{" <term> "}" | "def" "{" <predication-statement> "}" | "form" "{" <term> "}" | "form" "{" <term> "?=" <term> "}"
 
-<statement-declaration> ::= "let" "{" <statement> "}" | "syn" "{" <statement> "}"
+<statement-declaration> ::= "asrt" "{" <statement> "}" | "syn" "{" <statement> "}"
 
 <predication-statement> ::= <term> ";" <statment> | <term> ";" <decapitated-relation>
 
@@ -24,4 +24,4 @@
 
 <block-comment> ::= "/*" ("*"(^"/")|^"*")* "*/"
 
-<line-comment> ::= "#" (^"\n")* "\n" 
+<line-comment> ::= "/#" (^"\n")* (^"\n" "\") "\n" 

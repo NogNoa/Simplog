@@ -4,7 +4,7 @@ keywords:
                         terms           statements
     defined/proved      def(ine)        pr(o)v(e)
 
-    un[defin|prov]ed    prim(itive)     let
+    un[defin|prov]ed    prim(itive)     asrt
     
     well formed         form(ula)       syn(tax)
 
@@ -50,8 +50,6 @@ form {t,g:\is      <term>, r:\is    <relation>; {t;r g ?= t; t r g}}
 form {t:\is <object-term>, g:\is <type-term>; {t::g ?= t:\is g}}
 form {t::<object-term>   , g::<type-term>   ; {t::g ?= t:\is g}}
 
-let {\all t::<type-term>; {\all (s::<type-term>): t != s; {\all a: a \is t; {\not a \is s}}}}
-# axium of monotypicality
 
 /*
 The type of a term need to be mentioned only if it's not implied from syntax of a positive statement regarding it. The statement hold true for all implied types.
