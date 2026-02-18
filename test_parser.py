@@ -1,44 +1,43 @@
 #!/usr/bin/env python3
 """
-Example usage of the simplog parser
+Example usage of the simplog parser with updated grammar
 """
 
 from parser import parse_code, ast_to_string, Lexer
 
-# Example 1: Simple primitive declaration
+# Example 1: Simple primitive declarations (atomic terms)
 example1 = """
-prim <term>
-prim <statement>
+prim (type)
+prim (statement)
 """
 
-# Example 2: Keyword definitions from simple syntax
+# Example 2: Multiple atomic terms in prim (tuple-term)
 example2 = """
-prim :
-prim ;
-prim ?=
+prim (object)
+prim (term, relation)
 """
 
-# Example 3: Operator definition
+# Example 3: Form with atomic term
 example3 = """
-prim <relation>
-syn {<term> <relation> <term>}
+form (type::statement)
 """
 
-# Example 4: More complex statement with conjunction
+# Example 4: Form with multiple terms (tuple)
 example4 = """
-syn {<term> \and <term>}
+form (term, relation, qualifier)
 """
 
-# Example 5: Form with pattern
+# Example 5: Form with parenthesized term
 example5 = """
-form {<term>:<statement>}
+form ((term))
 """
 
-# Example 6: Predication statement (from lists.slg)
+# Example 6: Definition with predication statement
 example6 = """
-prim <object-term>
-form {t::<object-term>, g::<type-term>; {t::g ?= t:\\is g}} 
+prim(pred)
+def (t, g; pred)
 """
+
 
 
 def test_lexer(source: str, label: str):

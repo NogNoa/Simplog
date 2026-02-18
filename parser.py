@@ -347,6 +347,18 @@ class Term(ASTNode):
 
 
 @dataclass
+class AtomicTerm(Term):
+    """Atomic term: identifier, relation, or parenthesized atomic"""
+    term: Term  # the inner atomic term
+
+
+@dataclass
+class TupleTerm(Term):
+    """Tuple of atomic terms: a, b, c or just a"""
+    terms: List['AtomicTerm']  # list of atomic terms
+
+
+@dataclass
 class IdentifierTerm(Term):
     """Simple identifier term"""
     name: str
@@ -622,6 +634,7 @@ class Parser:
         elif self._match(TokenType.PRV):
             return self._parse_argument()
         elif self._match(TokenType.LBRACE):
+            self._advance()  # consume '{'
             stmt = self._parse_statement()
             self._consume(TokenType.RBRACE, "Expected '}'")
             return BlockStatement(statement=stmt)
@@ -630,58 +643,48 @@ class Parser:
             return self._parse_base_statement()
     
     def _parse_term_declaration(self, kind: str) -> TermDeclaration:
-        """Parse prim { term } or form { term } or form { term ?= term }"""
+        """Parse prim ( tuple-term ) or form ( term )"""
         self._advance()  # consume keyword
-        self._consume(TokenType.LBRACE, f"Expected '{{' after '{kind}'")
+        self._consume(TokenType.LPAREN, f"Expected '(' after '{kind}'")
         
-        term = self._parse_term()
+        if kind == 'prim':
+            term = self._parse_tuple_term()
+        else:  # form
+            term = self._parse_term()
 
         if kind == 'form' and self._match(TokenType.QEQ):
             self._advance()
             pattern = self._parse_term()
-            self._consume(TokenType.RBRACE, "Expected '}'")
+            self._consume(TokenType.RPAREN, "Expected ')'")
             decl = TermDeclaration(kind=kind, content=term, pattern=pattern)
         else:
-            self._consume(TokenType.RBRACE, "Expected '}'")
+            self._consume(TokenType.RPAREN, "Expected ')'")
             decl = TermDeclaration(kind=kind, content=term)
 
-        # register prim/def terms so later occurrences are recognised
-        if kind in ('prim', 'def'):
+        # register prim/form terms so later occurrences are recognised
+        if kind in ('prim', 'form'):
             self._register_declaration(decl)
 
         return decl
+
     
     def _parse_term_or_statement_declaration(self, kind: str) -> Union[TermDeclaration, StatementDeclaration]:
-        """Parse def which can be either term or statement declaration"""
+        """Parse def ( predication-statement ) where predication = term ; statement"""
         self._advance()  # consume 'def'
-        self._consume(TokenType.LBRACE, f"Expected '{{' after '{kind}'")
+        self._consume(TokenType.LPAREN, f"Expected '(' after '{kind}'")
         
-        # Try to parse as statement first (term ; statement pattern)
-        start_pos = self.pos
+        # def requires: term ; statement (predication statement)
+        term = self._parse_tuple_term()
+        self._consume(TokenType.SEMICOLON, "Expected ';' in def predication statement")
+        statement = self._parse_statement()
+        self._consume(TokenType.RPAREN, "Expected ')'")
         
-        try:
-            term = self._parse_term()
-            if self._match(TokenType.SEMICOLON):
-                self._advance()
-                pred_stmt = self._parse_statement()
-                self._consume(TokenType.RBRACE, "Expected '}'")
-                pred = PredictionStatement(term=term, predicate=pred_stmt)
-                decl = TermDeclaration(kind=kind, content=pred)
-                # def introduces term names
-                self._register_declaration(decl)
-                return decl
-        except:
-            pass
-        
-        # Reset and try as pure term or statement
-        self.pos = start_pos
-        content = self._parse_term()
-
-        self._consume(TokenType.RBRACE, "Expected '}'")
-        decl = TermDeclaration(kind=kind, content=content)
-        # def may introduce term names
+        pred = PredictionStatement(term=term, predicate=statement)
+        decl = TermDeclaration(kind=kind, content=pred)
+        # def introduces term names
         self._register_declaration(decl)
         return decl
+
     
     def _parse_statement_declaration(self, kind: str) -> StatementDeclaration:
         """Parse asrt { statement } or syn { statement }"""
@@ -781,64 +784,60 @@ class Parser:
                 self._match(TokenType.LANGLE))
     
     def _parse_term(self) -> Term:
-        """Parse a term"""
-        return self._parse_comma_term()
-    
-    def _parse_comma_term(self) -> Term:
-        """Parse comma-separated terms"""
-        terms = [self._parse_qualified_term()]
-        
-        while self._match(TokenType.COMMA):
-            self._advance()
-            terms.append(self._parse_qualified_term())
-        
-        if len(terms) == 1:
-            return terms[0]
-        return CommaSeqTerm(terms=terms)
-    
-    def _parse_qualified_term(self) -> Term:
-        """Parse qualified term (with :: or : or relation)"""
-        term = self._parse_primary_term()
-        
-        if self._match(TokenType.DCOLON):
-            self._advance()
-            qualifier = self._parse_primary_term()
-            return QualifiedTerm(term=term, qualifier_type='dcolon', qualifier=qualifier)
-        elif self._match(TokenType.COLON):
-            self._advance()
-            if self._check(TokenType.LBRACE):
-                # term : statement
-                self._advance()
-                statement = self._parse_statement()
-                self._consume(TokenType.RBRACE, "Expected '}'")
-                return QualifiedTerm(term=term, qualifier_type='colon', qualifier=statement)
-            else:
-                # term : relation
-                relation = self._parse_primary_term()
-                if self._match(TokenType.IDENTIFIER, TokenType.LANGLE):
-                    # decapitated relation
-                    right = self._parse_primary_term()
-                    decap_rel = DecapitatedRelation(relation=relation, right=right)
-                    return QualifiedTerm(term=term, qualifier_type='colon', qualifier=decap_rel)
-                else:
-                    return QualifiedTerm(term=term, qualifier_type='colon', qualifier=relation)
-        
-        # Check for relation (left-hand side)
-        if self._is_relation() and not self._check(TokenType.COMMA) and not self._check(TokenType.RBRACE):
-            relation = self._parse_primary_term()
-            right = self._parse_primary_term()
-            return RelationTerm(left=term, relation=relation, right=right)
-        
-        return term
-    
-    def _parse_primary_term(self) -> Term:
-        """Parse primary term"""
+        """Parse a term: (term) | tuple-term | qualified-term"""
+        # Handle parenthesized term
         if self._match(TokenType.LPAREN):
             self._advance()
             term = self._parse_term()
             self._consume(TokenType.RPAREN, "Expected ')'")
             return ParenthesizedTerm(term=term)
-        elif self._match(TokenType.IDENTIFIER):
+        
+        # Try qualified-term first (object-term::type-term or term:statement)
+        # These have special markers (:: or :) so we can detect them
+        qualified = self._try_parse_qualified_term()
+        if qualified:
+            return qualified
+        
+        # Otherwise parse as tuple-term
+        return self._parse_tuple_term()
+
+    def _parse_tuple_term(self) -> Term:
+        """Parse tuple-term: atomic-term | atomic-term "," tuple-term"""
+        terms = []
+        terms.append(self._parse_atomic_term())
+        
+        while self._match(TokenType.COMMA):
+            self._advance()
+            terms.append(self._parse_atomic_term())
+        
+        if len(terms) == 1:
+            return terms[0]
+        return TupleTerm(terms=terms)
+
+    def _parse_atomic_term(self) -> AtomicTerm:
+        """Parse atomic-term: (atomic-term) | identifier | relation"""
+        # Parenthesized atomic term
+        if self._match(TokenType.LPAREN):
+            self._advance()
+            inner = self._parse_atomic_term()
+            self._consume(TokenType.RPAREN, "Expected ')'")
+            return AtomicTerm(term=ParenthesizedTerm(term=inner.term if isinstance(inner, AtomicTerm) else inner))
+        
+        # Parse simple atomic: identifier or relation-term
+        left = self._parse_simple_term()
+        
+        # Check for relation (left-hand side)
+        if self._check(TokenType.IDENTIFIER) or self._check(TokenType.LANGLE):
+            if self._is_relation():
+                relation = self._parse_simple_term()
+                right = self._parse_simple_term()
+                return AtomicTerm(term=RelationTerm(left=left, relation=relation, right=right))
+        
+        return AtomicTerm(term=left)
+
+    def _parse_simple_term(self) -> Term:
+        """Parse simple term without operators: identifier or number"""
+        if self._match(TokenType.IDENTIFIER):
             token = self._advance()
             return IdentifierTerm(name=token.value, declared=(token.value in self.known_terms))
         elif self._match(TokenType.NUMBER):
@@ -849,6 +848,47 @@ class Parser:
             return IdentifierTerm(name=token.value, declared=(token.value in self.known_terms))
         else:
             self._error(f"Expected term, got {self._current_token().type}")
+
+    def _try_parse_qualified_term(self) -> Optional[Term]:
+        """Try to parse qualified-term, return None if not applicable"""
+        # Look ahead for :: or : markers
+        save_pos = self.pos
+        
+        try:
+            # Try to parse first atomic/identifier
+            if self._match(TokenType.IDENTIFIER) or self._match(TokenType.LANGLE):
+                first = self._parse_simple_term()
+                
+                # Check for :: (type qualification)
+                if self._match(TokenType.DCOLON):
+                    self._advance()
+                    qualifier = self._parse_simple_term()
+                    return QualifiedTerm(term=first, qualifier_type='dcolon', qualifier=qualifier)
+                
+                # Check for : (statement or relation qualification)
+                if self._match(TokenType.COLON):
+                    self._advance()
+                    if self._check(TokenType.LBRACE):
+                        # term : statement
+                        self._advance()
+                        statement = self._parse_statement()
+                        self._consume(TokenType.RBRACE, "Expected '}'")
+                        return QualifiedTerm(term=first, qualifier_type='colon', qualifier=statement)
+                    else:
+                        # term : decapitated-relation
+                        relation = self._parse_simple_term()
+                        if self._match(TokenType.IDENTIFIER, TokenType.LANGLE):
+                            right = self._parse_simple_term()
+                            decap_rel = DecapitatedRelation(relation=relation, right=right)
+                            return QualifiedTerm(term=first, qualifier_type='colon', qualifier=decap_rel)
+                        else:
+                            return QualifiedTerm(term=first, qualifier_type='colon', qualifier=relation)
+        except:
+            pass
+        
+        # Not a qualified term, reset and return None
+        self.pos = save_pos
+        return None
 
 
 def parse_code(source: str) -> List[Statement]:
