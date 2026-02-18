@@ -37,7 +37,7 @@ form {<term>:<statement>}
 # Example 6: Predication statement (from lists.slg)
 example6 = """
 prim <object-term>
-form {t::<object-term>, g::<type-term>; {t::g ?= t:\is g}}
+form {t::<object-term>, g::<type-term>; {t::g ?= t:\\is g}} 
 """
 
 

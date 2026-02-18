@@ -5,7 +5,7 @@ A parser for the simplog logic language as defined by simplog.bnf
 
 import re
 from enum import Enum, auto
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import List, Optional, Union, Any
 
 
@@ -35,7 +35,6 @@ class TokenType(Enum):
     ASRT = auto()
     SYN = auto()
     PRV = auto()
-    LET = auto()
     
     # Operators/Relations
     AND = auto()      # \and
@@ -71,7 +70,6 @@ class Lexer:
         'asrt': TokenType.ASRT,
         'syn': TokenType.SYN,
         'prv': TokenType.PRV,
-        'let': TokenType.LET,
     }
     
     OPERATORS = {
@@ -110,18 +108,18 @@ class Lexer:
         self.tokens.append(Token(TokenType.EOF, None, self.line, self.column))
         return self.tokens
     
-    def _current_char(self) -> Optional[str]:
+    def _current_char(self) -> str:
         if self.pos < len(self.source):
             return self.source[self.pos]
-        return None
+        return ''
     
-    def _peek_char(self, offset: int = 1) -> Optional[str]:
+    def _peek_char(self, offset: int = 1) -> str:
         pos = self.pos + offset
         if pos < len(self.source):
             return self.source[pos]
-        return None
+        return ''
     
-    def _advance(self) -> Optional[str]:
+    def _advance(self) -> str:
         if self.pos < len(self.source):
             ch = self.source[self.pos]
             self.pos += 1
@@ -131,7 +129,7 @@ class Lexer:
             else:
                 self.column += 1
             return ch
-        return None
+        return ''
     
     def _skip_whitespace_and_comments(self):
         """Skip whitespace and comments"""
@@ -232,7 +230,7 @@ class Lexer:
                 start_line, start_col = self.line, self.column
                 self._advance()
                 self._advance()
-                self.tokens.append(Token(TokenType.QEQS, '?=', start_line, start_col))
+                self.tokens.append(Token(TokenType.QEQ, '?=', start_line, start_col))
                 return True
         
         if ch == '=':
@@ -254,7 +252,7 @@ class Lexer:
             
             # Build operator name
             op_chars = '\\'
-            while self.pos < len(self.source) and self._current_char() and self._current_char().isalpha():
+            while self.pos < len(self.source) and self._current_char().isalpha():
                 op_chars += self._current_char()
                 self._advance()
             
@@ -338,8 +336,8 @@ class Lexer:
 @dataclass
 class ASTNode:
     """Base class for all AST nodes"""
-    line: int = 0
-    column: int = 0
+    line: int = field(init=False, default=0)
+    column: int = field(init=False, default=0)
 
 
 @dataclass
@@ -417,7 +415,7 @@ class BlockStatement(Statement):
 class TermDeclaration(Statement):
     """Term declaration: prim, def, or form"""
     kind: str  # 'prim', 'def', 'form'
-    content: Union[Term, 'PredictionStatement']
+    content: Union[Term, Statement]
     pattern: Optional[Term] = None  # For form with ?=
 
 
@@ -504,8 +502,7 @@ class Parser:
             if self._check(TokenType.EOF):
                 break
             stmt = self._parse_statement()
-            if stmt:
-                statements.append(stmt)
+            statements.append(stmt)
         
         return statements
     
@@ -551,7 +548,7 @@ class Parser:
     
     # Main parsing methods
     
-    def _parse_statement(self) -> Optional[Statement]:
+    def _parse_statement(self) -> Statement:
         """Parse a statement"""
         if self._match(TokenType.PRIM):
             return self._parse_term_declaration('prim')
@@ -565,8 +562,6 @@ class Parser:
             return self._parse_statement_declaration('syn')
         elif self._match(TokenType.PRV):
             return self._parse_argument()
-        elif self._match(TokenType.LET):
-            return self._parse_let_statement()
         elif self._match(TokenType.LBRACE):
             stmt = self._parse_statement()
             self._consume(TokenType.RBRACE, "Expected '}'")
@@ -582,7 +577,7 @@ class Parser:
         
         term = self._parse_term()
         
-        if kind == 'form' and self._match(TokenType.QEQS):
+        if kind == 'form' and self._match(TokenType.QEQ):
             self._advance()
             pattern = self._parse_term()
             self._consume(TokenType.RBRACE, "Expected '}'")
@@ -640,12 +635,6 @@ class Parser:
         
         return ArgumentStatement(statement=statement, deduction=deduction)
     
-    def _parse_let_statement(self) -> TermDeclaration:
-        """Parse let statement (wrapper for TermDeclaration)"""
-        self._advance()  # consume 'let'
-        stmt = self._parse_statement()
-        return TermDeclaration(kind='let', content=stmt)
-    
     def _parse_deduction(self) -> Deduction:
         """Parse premise \\trfr conclusion"""
         premise = self._parse_premise()
@@ -692,7 +681,7 @@ class Parser:
                 return False
         return False
     
-    def _parse_base_statement(self) -> Optional[Statement]:
+    def _parse_base_statement(self) -> Statement:
         """Parse base statement (term-based)"""
         term = self._parse_term()
         
