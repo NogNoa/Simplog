@@ -1,14 +1,18 @@
 <atomic-term> ::= "(" <atomic-term> ")" | <type-term> | <object-term> | <relation-term>
 
-<term> ::= | "(" <term> ")" | <atomic-term> | <qualified-term> | <term> "," <term> 
+<tuple-term> ::= "(" <tuple-term> ")" | <atomic-term> | <atomic-term> "," <tuple-term>
+
+<term> ::= "(" <term> ")" | <tuple-term> | <qualified-term>
 
 <qualified-term> ::= <object-term>::<type-term> | <term> ":" <statement> | <term> ":" <decapitated-relation>
 
 <statement> ::= "{" <statement> "}" | <term-declaration> | <statement-declaration> | <predication-statement> | <relation-statement> | <argument> | <statement> "\and" <statement> 
 
-<term-declaration> ::= "prim" "(" <atomic-term> ")" | "def" "{" <predication-statement> "}" | "form" "(" <term> ")" | "form" "{" <term> "?=" <term> "}"
+<term-declaration> ::= "prim" "(" <tuple-term> ")" | "def" "{" <primary-predication-statement> "}" | "form" "(" <term> ")" | "form" "{" <term> "?=" <term> "}"
 
 <statement-declaration> ::= "asrt" "{" <statement> "}" | "syn" "{" <statement> "}"
+
+<primary-predication-statement> ::= <tuple-term> ";" <statment> | <tuple-term> ";" <decapitated-relation>
 
 <predication-statement> ::= <term> ";" <statment> | <term> ";" <decapitated-relation>
 
