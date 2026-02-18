@@ -3,7 +3,7 @@
 Example usage of the simplog parser
 """
 
-from parser import parse_code, ast_to_string, Lexer, Parser, Token
+from parser import parse_code, ast_to_string, Lexer
 
 # Example 1: Simple primitive declaration
 example1 = """

@@ -350,6 +350,7 @@ class Term(ASTNode):
 class IdentifierTerm(Term):
     """Simple identifier term"""
     name: str
+    declared: bool = False
 
 
 @dataclass
@@ -493,18 +494,20 @@ class Parser:
     def __init__(self, tokens: List[Token]):
         self.tokens = tokens
         self.pos = 0
+        self.known_terms: set[str] = set()
+        self.parsed_statements: List[Statement] = []
         
     def parse(self) -> List[Statement]:
         """Parse tokens into a list of statements"""
-        statements = []
+        self.parsed_statements = []
         
         while not self._is_at_end():
             if self._check(TokenType.EOF):
                 break
             stmt = self._parse_statement()
-            statements.append(stmt)
+            self.parsed_statements.append(stmt)
         
-        return statements
+        return self.parsed_statements
     
     def _current_token(self) -> Token:
         if self.pos < len(self.tokens):
@@ -545,6 +548,62 @@ class Parser:
     def _error(self, msg: str):
         token = self._current_token()
         raise SyntaxError(f"Parse error at line {token.line}, column {token.column}: {msg}")
+
+    # Declaration / symbol table helpers
+    def _walk_node(self, node: Any, fn):
+        """Recursively walk AST node and call fn(node) for each AST node"""
+        if node is None:
+            return
+        fn(node)
+        # traverse known child attributes
+        for attr in ('term', 'terms', 'left', 'right', 'relation', 'predicate', 'content', 'statement', 'qualifier', 'premises', 'conclusion'):
+            child = getattr(node, attr, None)
+            if child is None:
+                continue
+            if isinstance(child, list):
+                for c in child:
+                    if hasattr(c, '__dict__'):
+                        self._walk_node(c, fn)
+            elif hasattr(child, '__dict__'):
+                self._walk_node(child, fn)
+
+    def _collect_identifier_names(self, node: Any) -> set:
+        names = set()
+        def collect(n):
+            if isinstance(n, IdentifierTerm):
+                names.add(n.name)
+        self._walk_node(node, collect)
+        return names
+
+    def _mark_declared_in_node(self, node: Any, names: set[str]):
+        def mark(n):
+            if isinstance(n, IdentifierTerm) and n.name in names:
+                n.declared = True
+        self._walk_node(node, mark)
+
+    def _register_declaration(self, decl: TermDeclaration):
+        # extract identifier names from declaration content
+        names = set()
+        if isinstance(decl.content, Term):
+            names = self._collect_identifier_names(decl.content)
+        elif isinstance(decl.content, PredictionStatement):
+            names = self._collect_identifier_names(decl.content.term)
+        elif isinstance(decl.content, Statement):
+            # defensively collect any identifiers inside
+            names = self._collect_identifier_names(decl.content)
+
+        if not names:
+            return
+
+        # add to known terms
+        self.known_terms.update(names)
+
+        # mark identifiers in this declaration as declared
+        self._mark_declared_in_node(decl, names)
+
+        # retroactively mark any earlier parsed statements
+        for stmt in self.parsed_statements:
+            self._mark_declared_in_node(stmt, names)
     
     # Main parsing methods
     
@@ -576,15 +635,21 @@ class Parser:
         self._consume(TokenType.LBRACE, f"Expected '{{' after '{kind}'")
         
         term = self._parse_term()
-        
+
         if kind == 'form' and self._match(TokenType.QEQ):
             self._advance()
             pattern = self._parse_term()
             self._consume(TokenType.RBRACE, "Expected '}'")
-            return TermDeclaration(kind=kind, content=term, pattern=pattern)
+            decl = TermDeclaration(kind=kind, content=term, pattern=pattern)
         else:
             self._consume(TokenType.RBRACE, "Expected '}'")
-            return TermDeclaration(kind=kind, content=term)
+            decl = TermDeclaration(kind=kind, content=term)
+
+        # register prim/def terms so later occurrences are recognised
+        if kind in ('prim', 'def'):
+            self._register_declaration(decl)
+
+        return decl
     
     def _parse_term_or_statement_declaration(self, kind: str) -> Union[TermDeclaration, StatementDeclaration]:
         """Parse def which can be either term or statement declaration"""
@@ -601,16 +666,22 @@ class Parser:
                 pred_stmt = self._parse_statement()
                 self._consume(TokenType.RBRACE, "Expected '}'")
                 pred = PredictionStatement(term=term, predicate=pred_stmt)
-                return TermDeclaration(kind=kind, content=pred)
+                decl = TermDeclaration(kind=kind, content=pred)
+                # def introduces term names
+                self._register_declaration(decl)
+                return decl
         except:
             pass
         
         # Reset and try as pure term or statement
         self.pos = start_pos
         content = self._parse_term()
-        
+
         self._consume(TokenType.RBRACE, "Expected '}'")
-        return TermDeclaration(kind=kind, content=content)
+        decl = TermDeclaration(kind=kind, content=content)
+        # def may introduce term names
+        self._register_declaration(decl)
+        return decl
     
     def _parse_statement_declaration(self, kind: str) -> StatementDeclaration:
         """Parse asrt { statement } or syn { statement }"""
@@ -769,13 +840,13 @@ class Parser:
             return ParenthesizedTerm(term=term)
         elif self._match(TokenType.IDENTIFIER):
             token = self._advance()
-            return IdentifierTerm(name=token.value)
+            return IdentifierTerm(name=token.value, declared=(token.value in self.known_terms))
         elif self._match(TokenType.NUMBER):
             token = self._advance()
             return NumberTerm(value=token.value)
         elif self._match(TokenType.LANGLE):
             token = self._advance()
-            return IdentifierTerm(name=token.value)
+            return IdentifierTerm(name=token.value, declared=(token.value in self.known_terms))
         else:
             self._error(f"Expected term, got {self._current_token().type}")
 
