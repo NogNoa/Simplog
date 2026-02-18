@@ -216,13 +216,9 @@ class Lexer:
         
         if ch == '=':
             start_line, start_col = self.line, self.column
+            # Single '=' token only (no '==')
             self._advance()
-            if self._current_char() == '=':
-                self._advance()
-                self.tokens.append(Token(TokenType.EQUALS, '==', start_line, start_col))
-            else:
-                # Reset and try ?=
-                return False
+            self.tokens.append(Token(TokenType.EQUALS, '=', start_line, start_col))
             return True
         
         if ch == '?':
@@ -645,8 +641,13 @@ class Parser:
     def _parse_term_declaration(self, kind: str) -> TermDeclaration:
         """Parse prim ( tuple-term ) or form ( term )"""
         self._advance()  # consume keyword
-        self._consume(TokenType.LPAREN, f"Expected '(' after '{kind}'")
-        
+
+        # Parens are optional in existing practice; accept either form
+        has_paren = False
+        if self._match(TokenType.LPAREN):
+            has_paren = True
+            self._advance()
+
         if kind == 'prim':
             term = self._parse_tuple_term()
         else:  # form
@@ -655,10 +656,12 @@ class Parser:
         if kind == 'form' and self._match(TokenType.QEQ):
             self._advance()
             pattern = self._parse_term()
-            self._consume(TokenType.RPAREN, "Expected ')'")
+            if has_paren:
+                self._consume(TokenType.RPAREN, "Expected ')'")
             decl = TermDeclaration(kind=kind, content=term, pattern=pattern)
         else:
-            self._consume(TokenType.RPAREN, "Expected ')'")
+            if has_paren:
+                self._consume(TokenType.RPAREN, "Expected ')'")
             decl = TermDeclaration(kind=kind, content=term)
 
         # register prim/form terms so later occurrences are recognised
@@ -671,16 +674,29 @@ class Parser:
     def _parse_term_or_statement_declaration(self, kind: str) -> Union[TermDeclaration, StatementDeclaration]:
         """Parse def ( predication-statement ) where predication = term ; statement"""
         self._advance()  # consume 'def'
-        self._consume(TokenType.LPAREN, f"Expected '(' after '{kind}'")
-        
-        # def requires: term ; statement (predication statement)
+
+        # Parens optional: accept def (t, g; stmt) or def t, g; stmt
+        has_paren = False
+        if self._match(TokenType.LPAREN):
+            has_paren = True
+            self._advance()
+
+        # Parse the tuple-term (or single atomic)
         term = self._parse_tuple_term()
-        self._consume(TokenType.SEMICOLON, "Expected ';' in def predication statement")
-        statement = self._parse_statement()
-        self._consume(TokenType.RPAREN, "Expected ')'")
-        
-        pred = PredictionStatement(term=term, predicate=statement)
-        decl = TermDeclaration(kind=kind, content=pred)
+
+        # If predication separator present, parse predicate statement
+        if self._match(TokenType.SEMICOLON):
+            self._advance()
+            statement = self._parse_statement()
+            if has_paren:
+                self._consume(TokenType.RPAREN, "Expected ')'")
+            pred = PredictionStatement(term=term, predicate=statement)
+            decl = TermDeclaration(kind=kind, content=pred)
+        else:
+            if has_paren:
+                self._consume(TokenType.RPAREN, "Expected ')'")
+            decl = TermDeclaration(kind=kind, content=term)
+
         # def introduces term names
         self._register_declaration(decl)
         return decl

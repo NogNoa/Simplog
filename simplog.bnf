@@ -8,7 +8,7 @@
 
 <statement> ::= "{" <statement> "}" | <term-declaration> | <statement-declaration> | <predication-statement> | <relation-statement> | <argument> | <statement> "\and" <statement> 
 
-<term-declaration> ::= "prim" "(" <tuple-term> ")" | "def" "{" <primary-predication-statement> "}" | "form" "(" <term> ")" | "form" "{" <term> "?=" <term> "}"
+<term-declaration> ::= "prim" <tuple-term> | "def"  <primary-predication-statement> | "form" <term> | "form" "{" <term> "?=" <term> "}"
 
 <statement-declaration> ::= "asrt" "{" <statement> "}" | "syn" "{" <statement> "}"
 

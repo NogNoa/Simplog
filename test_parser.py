@@ -106,4 +106,4 @@ if __name__ == "__main__":
     with open("simple syntax.slg", "r", encoding="utf-8") as f:
         syntax_code = f.read()
     
-    test_parser(syntax_code[:500], "Real simplog code (partial)")
+    test_parser(syntax_code, "Real simplog code (partial)")

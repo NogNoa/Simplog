@@ -1,5 +1,6 @@
 /* Declaration Syntax */
 
+/*
 keywords:
                         terms           statements
     defined/proved      def(ine)        pr(o)v(e)
@@ -7,6 +8,7 @@ keywords:
     un[defin|prov]ed    prim(itive)     asrt
     
     well formed         form(ula)       syn(tax)
+*/
 
 prim <statement>
 prim <term>
@@ -17,7 +19,7 @@ syn {prim <term>}
 syn {asrt <statement>}
 
 prim :
-form {<term>:<statement>}
+form (<term>:<statement>)
 prim ;
 syn {<term>;<statment>}
 prim ?=
@@ -37,7 +39,7 @@ prim \and
 syn {<statement> \and <statement>}
 
 prim ,
-form{<term>, <term>}
+form (<term>, <term>)
 form {a:a \is <term>, b: b \is <term>, s: s \is statement; {a, b: s ?= a:s, b:s}}
 form {a,b: a,b \is <term>,            s: s \is statement; {a, b: s ?= a:s, b:s}}
 
