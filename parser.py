@@ -3,7 +3,6 @@ Simplog Parser
 A parser for the simplog logic language as defined by simplog.bnf
 """
 
-import re
 from enum import Enum, auto
 from dataclasses import dataclass, field
 from typing import List, Optional, Union, Any
@@ -184,6 +183,11 @@ class Lexer:
         ch = self._current_char()
         token_type = None
         
+        # Special handling for '<': if followed by alphanumeric, it's part of a <...> identifier
+        # so skip it here and let _match_identifier_or_keyword handle the full sequence
+        if ch == '<' and self._peek_char() and (self._peek_char().isalnum() or self._peek_char() == '_'):
+            return False
+        
         single_char_tokens = {
             '(': TokenType.LPAREN,
             ')': TokenType.RPAREN,
@@ -194,6 +198,7 @@ class Lexer:
             ',': TokenType.COMMA,
             ';': TokenType.SEMICOLON,
             '|': TokenType.PIPE,
+            '=': TokenType.EQUALS,
         }
         
         if ch in single_char_tokens:
@@ -214,13 +219,6 @@ class Lexer:
                 self.tokens.append(Token(TokenType.COLON, ':', start_line, start_col))
             return True
         
-        if ch == '=':
-            start_line, start_col = self.line, self.column
-            # Single '=' token only (no '==')
-            self._advance()
-            self.tokens.append(Token(TokenType.EQUALS, '=', start_line, start_col))
-            return True
-        
         if ch == '?':
             if self._peek_char() == '=':
                 start_line, start_col = self.line, self.column
@@ -228,12 +226,6 @@ class Lexer:
                 self._advance()
                 self.tokens.append(Token(TokenType.QEQ, '?=', start_line, start_col))
                 return True
-        
-        if ch == '=':
-            start_line, start_col = self.line, self.column
-            self._advance()
-            self.tokens.append(Token(TokenType.EQUALS, '=', start_line, start_col))
-            return True
         
         return False
     
@@ -243,23 +235,21 @@ class Lexer:
         
         if ch == '\\':
             start_line, start_col = self.line, self.column
-            start_pos = self.pos
             self._advance()
-            
-            # Build operator name
+
+            # Build operator name: collect until whitespace or delimiting punctuation
             op_chars = '\\'
-            while self.pos < len(self.source) and self._current_char().isalpha():
+            while self.pos < len(self.source) and self._current_char() not in ' \t\n\r(){}<>,;|':
                 op_chars += self._current_char()
                 self._advance()
-            
+
             if op_chars in self.OPERATORS:
                 self.tokens.append(Token(self.OPERATORS[op_chars], op_chars, start_line, start_col))
                 return True
             else:
-                # Not a known operator, put it back
-                self.pos = start_pos
-                self.column = start_col
-                return False
+                # Unknown backslash sequence: treat it as an identifier-like token so parsing can continue
+                self.tokens.append(Token(TokenType.IDENTIFIER, op_chars, start_line, start_col))
+                return True
         
         return False
     
