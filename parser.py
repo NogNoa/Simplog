@@ -580,15 +580,30 @@ class Parser:
         self._walk_node(node, mark)
 
     def _register_declaration(self, decl: TermDeclaration):
-        # extract identifier names from declaration content
+        # Fast-path: if declaration content is a TupleTerm or AtomicTerm, extract identifiers directly
         names = set()
-        if isinstance(decl.content, Term):
-            names = self._collect_identifier_names(decl.content)
-        elif isinstance(decl.content, PredictionStatement):
-            names = self._collect_identifier_names(decl.content.term)
-        elif isinstance(decl.content, Statement):
-            # defensively collect any identifiers inside
-            names = self._collect_identifier_names(decl.content)
+        content = decl.content
+
+        if isinstance(content, TupleTerm):
+            for at in content.terms:
+                # at is AtomicTerm; its .term may be IdentifierTerm or ParenthesizedTerm
+                inner = getattr(at, 'term', None)
+                if isinstance(inner, IdentifierTerm):
+                    names.add(inner.name)
+                elif isinstance(inner, ParenthesizedTerm) and isinstance(inner.term, IdentifierTerm):
+                    names.add(inner.term.name)
+        elif isinstance(content, AtomicTerm):
+            inner = getattr(content, 'term', None)
+            if isinstance(inner, IdentifierTerm):
+                names.add(inner.name)
+            elif isinstance(inner, ParenthesizedTerm) and isinstance(inner.term, IdentifierTerm):
+                names.add(inner.term.name)
+        elif isinstance(content, PredictionStatement):
+            names = self._collect_identifier_names(content.term)
+        elif isinstance(content, Term):
+            names = self._collect_identifier_names(content)
+        elif isinstance(content, Statement):
+            names = self._collect_identifier_names(content)
 
         if not names:
             return
@@ -911,7 +926,8 @@ def ast_to_string(node: ASTNode, indent: int = 0) -> str:
     prefix = "  " * indent
     
     if isinstance(node, IdentifierTerm):
-        return f"{prefix}Identifier: {node.name}"
+        declared = " [decl]" if getattr(node, 'declared', False) else ""
+        return f"{prefix}Identifier: {node.name}{declared}"
     elif isinstance(node, NumberTerm):
         return f"{prefix}Number: {node.value}"
     elif isinstance(node, ParenthesizedTerm):
@@ -919,6 +935,11 @@ def ast_to_string(node: ASTNode, indent: int = 0) -> str:
     elif isinstance(node, CommaSeqTerm):
         terms_str = '\n'.join(ast_to_string(t, indent + 1) for t in node.terms)
         return f"{prefix}CommaSequence:\n{terms_str}"
+    elif isinstance(node, AtomicTerm):
+        return f"{prefix}AtomicTerm\n{ast_to_string(node.term, indent + 1)}"
+    elif isinstance(node, TupleTerm):
+        terms_str = '\n'.join(ast_to_string(t, indent + 1) for t in node.terms)
+        return f"{prefix}TupleTerm:\n{terms_str}"
     elif isinstance(node, QualifiedTerm):
         term_str = ast_to_string(node.term, indent + 1)
         qual_str = ast_to_string(node.qualifier, indent + 1)
